@@ -42,9 +42,11 @@ class DAQ(Container):
         Container.__init__()
 
     def init(self,):
-        self.prev_arr = self.arr.copy()
         self.tot_laser_shot = 0
-        self.avg_hit_list = [] 
+        self.avg_hit_list = []
+    
+    def init_prev_arr(self,): # Also Clear
+        self.prev_arr = self.arr.copy()
     
     def get_tot_avg_hit(self):
         if self.avg_hit_list:
