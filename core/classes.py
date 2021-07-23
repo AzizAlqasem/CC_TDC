@@ -5,7 +5,13 @@ from threading import Thread
 
 
 # General (Level 0) Class
-class Container:
+#class Container:
+
+#    def set_arr(self): #Also Clear
+#        self.arr = np.zeros(self.size, dtype=self.type)
+
+
+class Threading:
 
     def __init__(self):
         self.terminate = False # Terminate running Thread
@@ -13,15 +19,10 @@ class Container:
         #Check the status of run loop
         self.is_running = False 
 
-
-    def set_arr(self, size=100, type=np.int64): #Also Clear
-        self.arr = np.zeros(size, dtype=type)
-
     def run(self,):
         self.is_running = True
         while self.terminate==False:
             self._run()  # Having the func _run is required for any chiled class
-
         self.is_running=False
 
     def start_thread(self,):
@@ -35,27 +36,38 @@ class Container:
 
 # Main DataAQ from CC_USB <<-- TDC
 # Branch (Level 1) Classes
-class DAQ(Container):
+class DAQ:
 
     def __init__(self, name="TDC"):
         self.name = name
-        Container.__init__()
+        self.size = settings.set_setting(key="arr_size", target=self.name)
+        self.type = np.int64
+        self.init_prev_arr()
+        self.bins_to_time()
+        #Container.__init__() #will be taken by DCounter object
 
     def init(self,):
-        self.tot_laser_shot = 0
         self.avg_hit_list = []
+        self.set_arr()
+        self.set_channel_arr()
     
     def init_prev_arr(self,): # Also Clear
         self.prev_arr = self.arr.copy()
     
-    def get_tot_avg_hit(self):
-        if self.avg_hit_list:
-            return np.average(self.avg_hit_list)
-        return np.nan
+    def set_arr(self): #Also Clear
+        self.arr = np.zeros(self.size, dtype=self.type)
 
-    def bins_to_time(self, channel,  slop, offset, time_resolution):
+    def set_channel_arr(self,):
+        channel_size=settings.get_setting("nodch", target=self.name)
+        self.channel_arr = np.zeros([1, channel_size], dtype=np.int32)
+
+    def bins_to_time(self):
+        channel = settings.get_setting("input_channel_number", target = self.name)
+        slop = settings.get_setting("time_slop", target = self.name)
+        offset = settings.get_setting("time_offset", target = self.name)
+        time_resolution = settings.get_setting("time_resolution", target = self.name)
         self.tdc_t_shift = slop * channel + offset # unit in [ns]
-        self.time_ar = time_resolution * np.arange(2048, dtype=np.float64) + self.tdc_t_shift #ns
+        self.time_arr = time_resolution * np.arange(self.size, dtype=self.type) + self.tdc_t_shift #ns
 
     def auto_save(self):
         with open(self.name+"_temp.csv", 'w') as f:
@@ -75,10 +87,10 @@ class DAQ(Container):
 
 
 # Branch (Level 1) classes
-class Display(Container):
+class Display(Container): #* remove container
     def __init__(self,):
         Container().__init__()
-        self.auto_scale = False
+        #self.auto_scale = False
 
     def init_fig(self, figsize=None, dpi=90):
         self.fig, self.ax = plt.subplots(figsize=figsize, dpi=dpi)
@@ -92,13 +104,13 @@ class Display(Container):
     def st_plot(self):
         self.handler.pyplot(self.fig)
 
-    def update(self, y_min=0):
+    def update(self, y_min=0): #* Remove This
         if type(self.line) is list:
             for i in range(len(line)):
                 self.line[i].set_ydata(self.arr[:,i])
         else: #One line
             self.line.set_ydata(self.arr)
-            if auto_scale:
+            if self.auto_scale:
                 self.ax.set_ylim(y_min, max(self.arr)*1.05)
 
     def clear(self, ):

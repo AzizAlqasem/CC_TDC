@@ -1,3 +1,5 @@
+# GUI related Settings
+auto_save_delay = 10       # n of loops to skip when auto saving
 
 # CC-USB Settings
 cc_time_out_ms = 100

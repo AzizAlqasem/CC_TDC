@@ -16,8 +16,11 @@ class Settings:
             setting = target + "_" + setting
         return self.settings_dict[setting]
 
-    def update(self, key, value): #Fetch settings from Settings page in the app
+    def set_setting(self, key, value, target=None): #Fetch settings from Settings page in the app
         #Read app settings and save changes
+        if target:
+            assert target in SUPPORTED_TARGETS
+            key = target + "_" + setting
         assert key in self.settings_dict
         self.settings_dict[key] = str(value)
 
@@ -59,9 +62,16 @@ class Settings:
 
     def post_calculations(self,):
         # tot_nodch:
-        targets = self.get_setting("target_modules")
+        self.targets = self.get_setting("target_modules")
         tot_nodch = sum(self.get_setting('nodch', target=target) for target in targets)
         self.settings_dict["tot_nodch"] = tot_nodch
+
+        # Array size:
+        for target in self.targets:
+            minv = self.get_setting('min_count_value', target=target)
+            maxv = self.get_setting('max_count_value', target=target)
+            self.set_setting(key="arr_size", value=int(maxv)-int(minv), target=target)
+            
 
 
  settings = Settings()

@@ -6,7 +6,7 @@ from interface.data_tools import raw_data_to_channel_arr, channel_arr_to_count_a
 class ReadOut:
 
     def __init__(self):
-        
+        pass
     
     def init(self,):
         self.cc_usb = cci.CC_USB(
@@ -67,3 +67,4 @@ class ReadOut:
         return self.channel_data_dict, self.number_of_data_chunck
 
 
+read_out = ReadOut()

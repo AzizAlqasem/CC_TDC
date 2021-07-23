@@ -1,39 +1,42 @@
-from classes import Display
+from classes import Display, Threading
+from time import sleep
 
-
-# Custom (Level 2) Clases
 ## Time Of Flight custom Class
-class ToF(Display):
+class ToF(Display, Threading):
 
-    def __init__(self,size=100, type=np.int64, figsize=[6,5]], dpi=120):
+    def __init__(self, tdcs_obj_list, figsize=[6,5], dpi=120, delay=1):
         Display().__init__()
-
-        self.arr_size = size
-        self.arr_type = type
+        self.tdcs_obj_list = tdcs_obj_list
         self.figsize = figsize
         self.dpi = dpi
-
-        # Init Array from Container class:
-        self.set_arr(size=self.arr_size, type=self.arr_type)
-
+        self.delay = delay  # sec
         # Init Figure from Display class:
         self.init_fig(figsize=self.figsize, dpi=self.dpi)
-        self.line, = self.ax.plot(self.arr) 
+
+        # init lines
+        self.lines = []
+        for tdc in self.tdcs_obj_list:
+            line, = self.ax.plot(tdc.time_arr, tdc.arr, label=tdc.name) # time, arr : for each module
+            self.lines.append(line)
 
         # Fig info:
         self.ax.set_title = "Time OF Flight"
         self.ax.set_xlabel = "Time (ns)"
         self.ax.set_ylabel = "Yeild (a.u.)"
 
+        self.fig.legend()  # also you can do: self.ax.legend()
+
+
     def _run(self):
-        # Read TDC arr  
-            ??
-        # Update plot
-        self.update(y_min=0.1)
-        # plot
+        # Read TDC arr and update line plot  
+        for i, tdc in enumerate(self.tdcs_obj_list):
+            self.lines[i].set_ydata(tdc.arr)
+        # Update plot scale
+        if self.auto_scale:
+            self.ax.set_ylim(0.1, max(self.arr)*1.05)
+        # render to the st app
         self.st_plot()
-
-
+        sleep(self.delay)
 
 
 ## Monitor TOF
@@ -91,6 +94,8 @@ class Mtof_hits(Display):
         self.ax.set_xlabel = "Time (updating ..)"
 
         self.ax.set_ylim(-0.5, 8.5)
+        
+        self.auto_scale = False
         
     def _run(self):
         # Read TDC arr  
