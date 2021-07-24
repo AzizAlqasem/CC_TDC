@@ -87,16 +87,10 @@ class DAQ:
 
 
 # Branch (Level 1) classes
-class Display(Container): #* remove container
-    def __init__(self,):
-        Container().__init__()
-        #self.auto_scale = False
+class Display: #* remove container
 
     def init_fig(self, figsize=None, dpi=90):
         self.fig, self.ax = plt.subplots(figsize=figsize, dpi=dpi)
-        #self.line, = self.ax.plot(self.arr) 
-        # ^ The arr is NOT set by default, so init arr first
-        # ^ Also the array could by n-dim
 
     def add_handler(self, handler):
         self.handler = handler
