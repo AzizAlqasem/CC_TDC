@@ -25,13 +25,19 @@ class Threading:
             self._run()  # Having the func _run is required for any chiled class
         self.is_running=False
 
-    def start_thread(self,):
+    def start_thread(self, chiled_threads:list=None):
         self.terminate = False
         # New Thread
         Thread(target=self.run).start()
+        if chiled_threads:
+            for ct in chiled_threads:
+                ct.start_thread()
 
-    def terminate_thread(self,):
+    def terminate_thread(self,chiled_threads:list=None):
         self.terminate = True 
+        if chiled_threads: #list of objects contains self.terminate
+            for ct in chiled_threads:
+                ct.terminate_thread()
 
 
 # Main DataAQ from CC_USB <<-- TDC
@@ -97,18 +103,5 @@ class Display: #* remove container
 
     def st_plot(self):
         self.handler.pyplot(self.fig)
-
-    def update(self, y_min=0): #* Remove This
-        if type(self.line) is list:
-            for i in range(len(line)):
-                self.line[i].set_ydata(self.arr[:,i])
-        else: #One line
-            self.line.set_ydata(self.arr)
-            if self.auto_scale:
-                self.ax.set_ylim(y_min, max(self.arr)*1.05)
-
-    def clear(self, ):
-        self.set_arr()
-        self.update()
 
 

@@ -1,4 +1,4 @@
-from interface import cci
+#from interface import cci
 from settings.settings import settings
 from interface.data_tools import raw_data_to_channel_arr, channel_arr_to_count_ar
 
@@ -51,14 +51,15 @@ class ReadOut:
         self.channel_data_dict {}
         s = 0
         for i, module in enumarate(self.target_modules):
-            nodch_list = [settings.get_setting('nodch', target=module) for module in self.target_modules]
-            e = nodch_list[i]
+            nodch = settings.get_setting('nodch', target=module)
+            e = s + nodch
             ch_arr = self.channel_data_arr[:, s:e] #*
             mcv = settings.get_setting('min_count_value', target=module)
             mxcv = settings.get_setting('max_count_value', target=module)
             data_arr = channel_arr_to_count_ar(ch_arr, mcv, mxcv)
             self.channel_data_dict[module] = (ch_arr, data_arr)
-    
+            s = e
+
     def get_data(self,): # Public
         self.get_raw_data()
         self.get_number_of_data_chunck()
@@ -67,4 +68,28 @@ class ReadOut:
         return self.channel_data_dict, self.number_of_data_chunck
 
 
-read_out = ReadOut()
+
+class Random_data_test(ReadOut):
+    def __init__(self, nom=1):
+        self.nom = nom #number of module
+        self.target_modules = settings.get_setting("target_modules")
+    
+    def init(self,):
+        pass # overwirte
+    def connect(self,):
+        pass
+    def close(self,):
+        pass
+
+    def get_raw_data(self,):
+        sm = self.settings_dict["start_marker"]
+        cs = self.nom*8 + 2
+        self.raw_data = np.random.randint(0, 4000, 409 * cs )
+        self.raw_data[0] = 409
+        self.raw_data[1:][::cs] = sm
+        self.raw_data[1:][sm::cs] = -1
+        
+
+
+#read_out = ReadOut()
+read_out = Random_data_test()

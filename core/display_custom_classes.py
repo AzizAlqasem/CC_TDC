@@ -16,6 +16,14 @@ class ToF(Display, Threading):
         for tdc in self.tdcs_obj_list:
             line, = self.ax.plot(tdc.time_arr, tdc.arr, label=tdc.name) # time, arr : for each module
             self.lines.append(line)
+        
+        # init prev lines
+        self.prev_lines = []
+        for tdc in self.tdcs_obj_list:
+            prev_line, = self.ax.plot(tdc.time_arr, tdc.prev_arr, label=tdc.name+'_prev') # time, arr : for each module
+            prev_line.set_linestyle("None") #Invisible
+            self.prev_lines.append(prev_line)
+
 
         # Fig info:
         self.ax.set_title = "Time OF Flight"
@@ -24,17 +32,27 @@ class ToF(Display, Threading):
 
         self.fig.legend()  # also you can do: self.ax.legend()
 
+    def update(self,):
+        for i, tdc in enumerate(self.tdcs_obj_list):
+            self.lines[i].set_ydata(tdc.arr)
 
     def _run(self):
         # Read TDC arr and update line plot  
-        for i, tdc in enumerate(self.tdcs_obj_list):
-            self.lines[i].set_ydata(tdc.arr)
+        self.update()
         # Update plot scale
         if self.auto_scale:
             self.ax.set_ylim(0.1, max(self.arr)*1.05)
         # render to the st app
         self.st_plot()
         sleep(self.delay)
+
+    def show_prev_arr(ON=True):
+        for i, tdc in enumerate(self.tdcs_obj_list):
+            if ON:
+                self.prev_lines[i].set_ydata(tdc.prev_arr)
+                self.prev_lines[i].set_linestyle("--")  # Visible
+            else:
+                self.prev_lines[i].set_linestyle("None") # Invisible
 
 
 
@@ -61,10 +79,14 @@ class Mtof_stream(Display, Threading):
 
         self.ax.set_ylim(-1, 2100)
         
-    def _run(self):
+
+    def update(self,):
         # Read TDC arr and update line plot  
         for i, tdc in enumerate(self.tdcs_obj_list):
             self.lines[i].set_ydata(tdc.channel_arr)
+
+    def _run(self):
+        self.update()
         # plot
         self.st_plot()
         sleep(self.delay)
@@ -74,7 +96,7 @@ class Mtof_stream(Display, Threading):
 ## Monitor TOF (avg Hit/shot)
 class Mtof_hits(Display, Threading):
 
-    def __init__(self,tdcs_obj_list,figsize=[6,5], dpi=120, delay=1)        
+    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=120, delay=1)        
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
         # Init Figure from Display class:
@@ -95,11 +117,13 @@ class Mtof_hits(Display, Threading):
 
         self.fig.legend()  # also you can do: self.ax.legend()
 
-        
-    def _run(self):
+    def update(self,):
         # Read TDC arr and update line plot  
         for i, tdc in enumerate(self.tdcs_obj_list):
-            self.lines[i].set_ydata(tdc.avg_hit_list)
+            self.lines[i].set_ydata(tdc.avg_hit_list)        
+
+    def _run(self):
+        self.update()
         # Update plot scale
         self.ax.set_xlim(0, int(len(tdc.avg_hit_list)*1.05))
         # render to the st app

@@ -1,6 +1,6 @@
 
 SUPPORTED_TARGETS = ["TDC2228A", "TDC4208"]
-POST_CALCULATIONS = ["tot_nodch", ]
+POST_CALCULATIONS = ["tot_nodch", "arr_size", 'start_marker']
 
 class Settings:
 
@@ -46,7 +46,7 @@ class Settings:
         commands = []
         if "TDC2228A" in target_modules:
             N = self.get_setting("TDC_2228A_slot_number")
-            noch = self.get_setting("TDC_2228A_nodch)
+            noch = self.get_setting("TDC_2228A_nodch")
             for A in range(noch):  # Read all channels
                 commands.append([N, A, 0])
             commands.append([N, 0, 9]) #commands to clear Data
@@ -71,7 +71,9 @@ class Settings:
             minv = self.get_setting('min_count_value', target=target)
             maxv = self.get_setting('max_count_value', target=target)
             self.set_setting(key="arr_size", value=int(maxv)-int(minv), target=target)
-            
+        
+        # Start Marker: define how many data point in each loop, taken from tdc(s)
+        self.settings_dict["start_marker"] = tot_nodch + 1 # "1" is the size of end marker
 
 
  settings = Settings()
