@@ -1,17 +1,19 @@
-from classes import DAQ, Threading
+from core.classes import DAQ, Threading
 from settings.settings import settings
 from interface.read_out import read_out
+from settings.settings import settings
+from time import sleep
 
 
 class DCounter(Threading): 
-    def __init__(self, auto_save_delay=10):
+    def __init__(self):
         self.init()
 
     def init(self,):
         self.auto_save_delay = settings.get_setting("auto_save_delay")
         # How many CC Modules do we have?:
         # Give each TDC module a DAQ obj
-        tdcs = settigns.get_setting("taget_modules")
+        tdcs = settings.get_setting("target_modules")
         self.tdcs_obj_list = []
         for tdc in tdcs:
             tdc_obj = DAQ(name = tdc)
@@ -42,9 +44,11 @@ class DCounter(Threading):
             tdc.avg_hit_list.append(data_arr.size/number_of_data_chunck)
         self.tot_laser_shot += number_of_data_chunck
         
-        
         if self.loop_counter % self.auto_save_delay == 0:
-            self.auto_save()
+            for tdc in self.tdcs_obj_list:
+                tdc.auto_save()
         
         self.loop_counter += 1
+        print("R DAQ")
+        sleep(0.9)
 

@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from threading import Thread
-
+from settings.settings import settings
+from streamlit.report_thread import add_report_ctx
 
 
 # General (Level 0) Class
@@ -28,7 +29,9 @@ class Threading:
     def start_thread(self, chiled_threads:list=None):
         self.terminate = False
         # New Thread
-        Thread(target=self.run).start()
+        thread = Thread(target=self.run)
+        add_report_ctx(thread)
+        thread.start()
         if chiled_threads:
             for ct in chiled_threads:
                 ct.start_thread()
@@ -46,26 +49,27 @@ class DAQ:
 
     def __init__(self, name="TDC"):
         self.name = name
-        self.size = settings.set_setting(key="arr_size", target=self.name)
+        self.size = settings.get_setting(setting="arr_size", target=self.name)
         self.type = np.int64
+        self.init()
         self.init_prev_arr()
         self.bins_to_time()
-        #Container.__init__() #will be taken by DCounter object
 
     def init(self,):
         self.avg_hit_list = []
         self.set_arr()
         self.set_channel_arr()
     
-    def init_prev_arr(self,): # Also Clear
-        self.prev_arr = self.arr.copy()
-    
     def set_arr(self): #Also Clear
         self.arr = np.zeros(self.size, dtype=self.type)
 
+    def init_prev_arr(self,): # Also Clear
+        self.prev_arr = self.arr.copy()
+    
     def set_channel_arr(self,):
+        self.channel_window_size = 100
         channel_size=settings.get_setting("nodch", target=self.name)
-        self.channel_arr = np.zeros([1, channel_size], dtype=np.int32)
+        self.channel_arr = np.zeros([self.channel_window_size, channel_size], dtype=np.int32)
 
     def bins_to_time(self):
         channel = settings.get_setting("input_channel_number", target = self.name)

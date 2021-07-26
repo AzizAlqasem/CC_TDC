@@ -1,3 +1,6 @@
+from tools.data_flow import auto_type_conv
+
+
 
 SUPPORTED_TARGETS = ["TDC2228A", "TDC4208"]
 POST_CALCULATIONS = ["tot_nodch", "arr_size", 'start_marker']
@@ -10,35 +13,34 @@ class Settings:
         self.post_calculations()
 
     def get_setting(self, setting:str, target=None):
-        assert setting in self.settings_dict
         if target:
-            assert target in SUPPORTED_TARGETS
             setting = target + "_" + setting
-        return self.settings_dict[setting]
+        return auto_type_conv(self.settings_dict[setting])
 
     def set_setting(self, key, value, target=None): #Fetch settings from Settings page in the app
         #Read app settings and save changes
         if target:
-            assert target in SUPPORTED_TARGETS
-            key = target + "_" + setting
-        assert key in self.settings_dict
+            key = target + "_" + key
         self.settings_dict[key] = str(value)
 
-        #* not efficient!
-        self.post_calculations()
-
-    def _load_settings(self, path='Default_settings.txt'):
+    def _load_settings(self, path='settings/Default_settings.txt'):
         with open(path, 'r') as sf:
             setting_text = sf.read().replace('\r','')
         self.settings_dict = {}
         for line in setting_text.split('\n'):
-            if line.startswith("#") or ":" not in line: #This is valued for header only
+            if line.startswith("#") or "=" not in line: #This is valued for header only
                 continue
-            line = line[ : line.find('#')].replace(' ', '')
+            end = line.find('#') 
+            if end == -1:
+                end = None 
+            line = line[ : end].replace(' ', '')
             key, value = line.split("=")
             if value.startswith("[") or "," in value:
                 value = value.replace("[",'').replace("]", '')
-                value = value.split(",")
+                if ',' in value:
+                    value = value.split(",")
+                    if not value[-1]: # ["abc",""]
+                        value = value[:-1]
             self.settings_dict[key] = value
     
     def generate_commands(self):
@@ -53,7 +55,7 @@ class Settings:
 
         if "TDC4208" in target_modules:
             N = self.get_setting("TDC_4208_slot_number")
-            noch = self.get_setting("TDC_4208_nodch)
+            noch = self.get_setting("TDC_4208_nodch")
             for A in range(noch):  # Read all channels
                 commands.append([N, A, 0])
             commands.append([N, 0, 9]) #commands to clear Data
@@ -63,7 +65,7 @@ class Settings:
     def post_calculations(self,):
         # tot_nodch:
         self.targets = self.get_setting("target_modules")
-        tot_nodch = sum(self.get_setting('nodch', target=target) for target in targets)
+        tot_nodch = sum(int(self.get_setting('nodch', target=target)) for target in self.targets)
         self.settings_dict["tot_nodch"] = tot_nodch
 
         # Array size:
@@ -76,5 +78,10 @@ class Settings:
         self.settings_dict["start_marker"] = tot_nodch + 1 # "1" is the size of end marker
 
 
- settings = Settings()
- 
+settings = Settings()
+
+
+
+
+        
+    

@@ -1,11 +1,13 @@
-from classes import Display, Threading
+from core.classes import Display, Threading
 from time import sleep
+from settings.settings import settings
+import numpy as np
 
 ## Time Of Flight custom Class
 class ToF(Display, Threading):
 
     def __init__(self, tdcs_obj_list, figsize=[6,5], dpi=120, delay=1):
-        self.auto_scale = False
+        self.auto_scale = True
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
         # Init Figure from Display class:
@@ -24,7 +26,6 @@ class ToF(Display, Threading):
             prev_line.set_linestyle("None") #Invisible
             self.prev_lines.append(prev_line)
 
-
         # Fig info:
         self.ax.set_title = "Time OF Flight"
         self.ax.set_xlabel = "Time (ns)"
@@ -32,19 +33,25 @@ class ToF(Display, Threading):
 
         self.fig.legend()  # also you can do: self.ax.legend()
 
+        self.ymax = 0
+
     def update(self,):
         for i, tdc in enumerate(self.tdcs_obj_list):
             self.lines[i].set_ydata(tdc.arr)
+            self.ymax = np.max([self.ymax, tdc.arr.max()])
+        if self.auto_scale:
+            self.ax.set_ylim(0.1, self.ymax*1.05)
+
 
     def _run(self):
         # Read TDC arr and update line plot  
         self.update()
         # Update plot scale
-        if self.auto_scale:
-            self.ax.set_ylim(0.1, max(self.arr)*1.05)
+        
         # render to the st app
         self.st_plot()
         sleep(self.delay)
+        print("R TOF")
 
     def show_prev_arr(ON=True):
         for i, tdc in enumerate(self.tdcs_obj_list):
@@ -61,51 +68,59 @@ class Mtof_stream(Display, Threading):
 
     def __init__(self, tdcs_obj_list, figsize=[4, 2], dpi=120, delay=1):
         self.tdcs_obj_list = tdcs_obj_list
-
+        self.delay = delay
         # Init Figure from Display class:
         self.init_fig(figsize=figsize, dpi=dpi)
-        self.get_lines()
 
         # init lines
         self.lines = []
         for tdc in self.tdcs_obj_list:
-            line, = self.ax.plot(tdc.channel_arr) # time, arr : for each module
-            self.lines.append(line)
+            sublines = []
+            for arr in tdc.channel_arr.T:
+                line, = self.ax.plot(arr) #list of lines
+                sublines.append(line)
+            self.lines.append(sublines)
 
         # Fig info:
         self.ax.set_title = "Channels Data"
         self.ax.set_xlabel = "Laser Shot (Updating ..)"
         self.ax.set_ylabel = "TDC Count"
 
-        self.ax.set_ylim(-1, 2100)
+        self.ax.set_ylim(-10, 2100)
         
 
     def update(self,):
         # Read TDC arr and update line plot  
         for i, tdc in enumerate(self.tdcs_obj_list):
-            self.lines[i].set_ydata(tdc.channel_arr)
+            for line in self.lines[i]:
+                line.set_ydata(tdc.channel_arr[:tdc.channel_window_size, i])
 
     def _run(self):
         self.update()
         # plot
         self.st_plot()
         sleep(self.delay)
+        print("R Stream")
 
 
 
 ## Monitor TOF (avg Hit/shot)
 class Mtof_hits(Display, Threading):
 
-    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=120, delay=1)        
+    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=120, delay=1, fixed_hit_arr_size=100):        
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
+        self.fixed_hit_arr_size = fixed_hit_arr_size
+        self.index = 0
         # Init Figure from Display class:
         self.init_fig(figsize=figsize, dpi=dpi)
+
+        self.init_fixed_hit_arr()
         
         # init lines
         self.lines = []
         for tdc in self.tdcs_obj_list:
-            line, = self.ax.plot(tdc.avg_hit_list label=tdc.name) # time, arr : for each module
+            line, = self.ax.plot(tdc.fixed_hit_arr, label=tdc.name) # time, arr : for each module
             self.lines.append(line)
 
         # Fig info:
@@ -114,18 +129,27 @@ class Mtof_hits(Display, Threading):
         self.ax.set_xlabel = "Time (updating ..)"
 
         self.ax.set_ylim(-0.5, 8.5)
-
+        self.ax.set_xlim(0, self.fixed_hit_arr_size)
         self.fig.legend()  # also you can do: self.ax.legend()
+
+    def init_fixed_hit_arr(self,):
+        for tdc in self.tdcs_obj_list:
+            tdc.fixed_hit_arr = np.zeros(self.fixed_hit_arr_size, dtype=np.int16)
+    
 
     def update(self,):
         # Read TDC arr and update line plot  
         for i, tdc in enumerate(self.tdcs_obj_list):
-            self.lines[i].set_ydata(tdc.avg_hit_list)        
+            tdc.fixed_hit_arr[self.index] = tdc.avg_hit_list[-1]
+            self.lines[i].set_ydata(tdc.fixed_hit_arr)      
+        # Update plot scale
+        self.index += 1
+        if self.index == self.fixed_hit_arr_size:
+            self.index = 0 
 
     def _run(self):
         self.update()
-        # Update plot scale
-        self.ax.set_xlim(0, int(len(tdc.avg_hit_list)*1.05))
+        print("R hit")
         # render to the st app
         self.st_plot()
         sleep(self.delay)

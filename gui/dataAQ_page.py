@@ -1,5 +1,6 @@
 import streamlit as st
-from gui.dataAq import Main
+from gui.dataAQ import Main
+from time import sleep
 
 main = Main()
 
@@ -15,8 +16,8 @@ def main_page():
     with fc1:
         tof_hand = st.pyplot(main.tof.fig)
     with fc2:
-        s_hand = st.pyplot(main.mtof_stream)
-        h_hand = st.pyplot(main.mtof_hit)
+        s_hand = st.pyplot(main.mtof_stream.fig)
+        h_hand = st.pyplot(main.mtof_hit.fig)
 
     main.add_handler(tof_hand, s_hand, h_hand)
 
@@ -42,5 +43,9 @@ def main_page():
         main.reload()
 
 
-
-    
+    while main.is_running:
+        tof_hand.pyplot(main.tof.fig)
+        s_hand.pyplot(main.mtof_stream.fig)
+        h_hand.pyplot(main.mtof_hit.fig)
+        sleep(1)
+        

@@ -10,4 +10,4 @@ select_pages = st.sidebar.selectbox(
 
 
 if select_pages == "DataAQ":
-    dataAQ_page.main()
+    dataAQ_page.main_page()

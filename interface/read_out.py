@@ -1,7 +1,7 @@
 #from interface import cci
 from settings.settings import settings
 from interface.data_tools import raw_data_to_channel_arr, channel_arr_to_count_ar
-
+import numpy as np
 
 class ReadOut:
 
@@ -48,9 +48,9 @@ class ReadOut:
         self.channel_data_arr = raw_data_to_channel_arr(self.raw_data)
     
     def _split_channel_arr_between_modules(self,):
-        self.channel_data_dict {}
+        self.channel_data_dict = {}
         s = 0
-        for i, module in enumarate(self.target_modules):
+        for i, module in enumerate(self.target_modules):
             nodch = settings.get_setting('nodch', target=module)
             e = s + nodch
             ch_arr = self.channel_data_arr[:, s:e] #*
@@ -82,14 +82,16 @@ class Random_data_test(ReadOut):
         pass
 
     def get_raw_data(self,):
-        sm = self.settings_dict["start_marker"]
+        sm = settings.get_setting("start_marker")
+        em = settings.get_setting("end_marker")
         cs = self.nom*8 + 2
-        self.raw_data = np.random.randint(0, 4000, 409 * cs )
+        self.raw_data = np.random.randint(0, 4000, (409 * cs) + 2) # 2 is for the extra [409 and -1]
         self.raw_data[0] = 409
         self.raw_data[1:][::cs] = sm
         self.raw_data[1:][sm::cs] = -1
+        self.raw_data[-1] = int(em)
         
 
 
 #read_out = ReadOut()
-read_out = Random_data_test()
+read_out = Random_data_test(1)

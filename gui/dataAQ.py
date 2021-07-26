@@ -28,7 +28,7 @@ class Main:
 
         self.dcounter = DCounter()
         
-        self.tof = Tof(self.dcounter.tdcs_obj_list, 
+        self.tof = ToF(self.dcounter.tdcs_obj_list, 
                     figsize=self.tof_fig_size, dpi=self.tof_dpi)
         
         self.mtof_stream = Mtof_stream(self.dcounter.tdcs_obj_list, 
@@ -42,7 +42,7 @@ class Main:
         if self.is_tdc_connected == False:
             self.__init__()
 
-    def add_handler(self, tof_hand, s_hand, h_hand)
+    def add_handler(self, tof_hand, s_hand, h_hand):
         # A figure handler must be added
         self.tof.add_handler(tof_hand)
         self.mtof_stream.add_handler(s_hand)
@@ -64,14 +64,16 @@ class Main:
             chiled_threads=[self.tof, self.mtof_stream, self.mtof_hit]
             )
         self.is_running = False
+        print("stop")
 
     def save(self, file_path, info:dict):
-        self.dcounter.save(file_path, info:dict)
+        self.dcounter.save(file_path, info)
 
 
     def clear(self):
         self.dcounter.clear()
-        for d in [self.tof, self.mtof_stream, self.Mtof_hit]:
+        self.mtof_hit.init_fixed_hit_arr()
+        for d in [self.tof, self.mtof_stream, self.mtof_hit]:
             d.update()
             d.st_plot()
 
