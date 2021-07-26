@@ -3,6 +3,7 @@ import numpy as np
 from threading import Thread
 from settings.settings import settings
 from streamlit.report_thread import add_report_ctx
+import datetime
 
 
 # General (Level 0) Class
@@ -50,7 +51,7 @@ class DAQ:
     def __init__(self, name="TDC"):
         self.name = name
         self.size = settings.get_setting(setting="arr_size", target=self.name)
-        self.type = np.int64
+        self.type = np.float64
         self.init()
         self.init_prev_arr()
         self.bins_to_time()
@@ -73,12 +74,15 @@ class DAQ:
         self.channel_arr = np.zeros([self.channel_window_size, channel_size], dtype=np.int32)
 
     def bins_to_time(self):
-        channel = settings.get_setting("input_channel_number", target = self.name)
-        slop = settings.get_setting("time_slop", target = self.name)
-        offset = settings.get_setting("time_offset", target = self.name)
-        time_resolution = settings.get_setting("time_resolution", target = self.name)
-        self.tdc_t_shift = slop * channel + offset # unit in [ns]
-        self.time_arr = time_resolution * np.arange(self.size, dtype=self.type) + self.tdc_t_shift #ns
+        self.channel = settings.get_setting("input_channel_number", target = self.name)
+        self.slop = settings.get_setting("time_slop", target = self.name)
+        self.offset = settings.get_setting("time_offset", target = self.name)
+        self.time_resolution = settings.get_setting("time_resolution", target = self.name)
+        self.tdc_t_shift = self.slop * self.channel + self.offset # unit in [ns]
+        self.time_arr = self.time_resolution * np.arange(self.size, dtype=self.type) + self.tdc_t_shift #ns
+
+    def get_tot_avg_hit(self,):
+        return np.average(self.avg_hit_list[1:]) if self.avg_hit_list else np.nan
 
     def auto_save(self):
         with open(self.name+"_temp.csv", 'w') as f:
@@ -86,8 +90,9 @@ class DAQ:
           
     def save(self, file_path, info:dict):
         self._gen_header(info)
+        file_path = file_path[:-4] + "_" + self.name + ".csv"
         with open(file_path, 'w') as fh:
-            np.savetxt(fh, np.array([self.time_ar,self.arr]).T, delimiter=',', header=self.header)
+            np.savetxt(fh, np.array([self.time_arr,self.arr]).T, delimiter=',', header=self.header)
         # store the data_count_ar
         self.prev_arr = self.arr.copy() #Previous data arr
 

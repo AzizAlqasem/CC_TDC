@@ -22,6 +22,9 @@ class Main:
         self.h_fig_size = [4, 2]
         self.h_dpi = 120
 
+        self.y_scale = 'linear' # log
+        self.xlim = (0.0, 100.0)
+        self.ylim = (0.0, 1.0)
     
     def init_obj(self):
         read_out.init()
@@ -69,9 +72,6 @@ class Main:
         self.is_running = False
         print("stop")
 
-    def save(self, file_path, info:dict):
-        self.dcounter.save(file_path, info)
-
 
     def clear(self):
         self.dcounter.clear()
@@ -91,5 +91,19 @@ class Main:
             self.is_tdc_connected = False
 
 
+    # tools:
+    def adj_y_scale(self, y_scale):
+        if y_scale != self.y_scale:
+            self.tof.ax.set_yscale(y_scale)
+            self.y_scale = y_scale
+
+    def adj_xlim(self, xlim):
+        if xlim != self.xlim:
+            self.tof.ax.set_xlim(*xlim)
+            self.xlim = xlim
+    def adj_ylim(self, ylim):
+        if ylim != self.ylim:
+            self.tof.ax.set_ylim(*ylim)
+            self.ylim = ylim
 
 

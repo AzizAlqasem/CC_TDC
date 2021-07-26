@@ -37,10 +37,10 @@ class ToF(Display, Threading):
 
     def update(self,):
         for i, tdc in enumerate(self.tdcs_obj_list):
-            self.lines[i].set_ydata(tdc.arr)
-            self.ymax = np.max([self.ymax, tdc.arr.max()])
-        if self.auto_scale:
-            self.ax.set_ylim(0.1, self.ymax*1.05)
+            self.lines[i].set_ydata(tdc.arr/tdc.arr.max()) #Normalization
+            #self.ymax = np.max([self.ymax, tdc.arr.max()])
+        #if self.auto_scale:
+        #    self.ax.set_ylim(0.1, self.ymax*1.05)
 
 
     def _run(self):
@@ -53,7 +53,7 @@ class ToF(Display, Threading):
         sleep(self.delay)
         print("R TOF")
 
-    def show_prev_arr(ON=True):
+    def show_prev_arr(self, ON=True):
         for i, tdc in enumerate(self.tdcs_obj_list):
             if ON:
                 self.prev_lines[i].set_ydata(tdc.prev_arr)

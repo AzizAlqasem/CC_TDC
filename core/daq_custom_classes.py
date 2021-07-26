@@ -3,6 +3,7 @@ from settings.settings import settings
 from interface.read_out import read_out
 from settings.settings import settings
 from time import sleep
+import numpy as np
 
 
 class DCounter(Threading): 
@@ -28,11 +29,13 @@ class DCounter(Threading):
         self.tot_laser_shot = 0
         self.loop_counter = 0
 
-    def get_tot_avg_hit(self):
-        if self.avg_hit_list:
-            return np.average(self.avg_hit_list[1:]) #"1" to remove init "0" 
-        return np.nan
-        
+    def get_tot_avg_hit(self): # redendencies with DAQ
+        tot_avg_hit_list = []
+        for tdc in self.tdcs_obj_list:
+            avg = tdc.get_tot_avg_hit()
+            tot_avg_hit_list.append([tdc.name, avg])
+        return tot_avg_hit_list
+            
     def _run(self,):
         # get data fron TDC
         channel_data_dict, number_of_data_chunck = read_out.get_data()
@@ -51,4 +54,13 @@ class DCounter(Threading):
         self.loop_counter += 1
         print("R DAQ")
         sleep(0.9)
+
+    def save(self, path, info):
+        for tdc in self.tdcs_obj_list:
+            info["Module name"] = tdc.name
+            info["Time Resolution (ns)"] = tdc.time_resolution
+            info["Average hit/shot"] = tdc.get_tot_avg_hit()
+            info["Total Laser shot"] = self.tot_laser_shot
+            tdc.save(path, info)
+
 
