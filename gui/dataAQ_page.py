@@ -47,5 +47,5 @@ def main_page():
         tof_hand.pyplot(main.tof.fig)
         s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
-        sleep(1)
+        sleep(2)
         

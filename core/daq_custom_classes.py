@@ -30,7 +30,7 @@ class DCounter(Threading):
 
     def get_tot_avg_hit(self):
         if self.avg_hit_list:
-            return np.average(self.avg_hit_list)
+            return np.average(self.avg_hit_list[1:]) #"1" to remove init "0" 
         return np.nan
         
     def _run(self,):

@@ -56,7 +56,7 @@ class DAQ:
         self.bins_to_time()
 
     def init(self,):
-        self.avg_hit_list = []
+        self.avg_hit_list = [0]  #0 is to init and will be omitted 
         self.set_arr()
         self.set_channel_arr()
     
@@ -67,7 +67,8 @@ class DAQ:
         self.prev_arr = self.arr.copy()
     
     def set_channel_arr(self,):
-        self.channel_window_size = 100
+        tot_channel_size=settings.get_setting("tot_nodch")
+        self.channel_window_size = 4000 // (tot_channel_size + 2) # #*Potential bugus when the stream has smaller size
         channel_size=settings.get_setting("nodch", target=self.name)
         self.channel_arr = np.zeros([self.channel_window_size, channel_size], dtype=np.int32)
 
