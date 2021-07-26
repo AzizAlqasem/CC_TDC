@@ -19,7 +19,7 @@ def main_page():
         s_hand = st.pyplot(main.mtof_stream.fig)
         h_hand = st.pyplot(main.mtof_hit.fig)
 
-    main.add_handler(tof_hand, s_hand, h_hand)
+    #main.add_handler(tof_hand, s_hand, h_hand)
 
     if st.button("Run"):
         main.run()

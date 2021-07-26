@@ -49,7 +49,7 @@ class ToF(Display, Threading):
         # Update plot scale
         
         # render to the st app
-        self.st_plot()
+        #self.st_plot()
         sleep(self.delay)
         print("R TOF")
 
@@ -98,7 +98,7 @@ class Mtof_stream(Display, Threading):
     def _run(self):
         self.update()
         # plot
-        self.st_plot()
+        #self.st_plot()
         sleep(self.delay)
         print("R Stream")
 
@@ -111,7 +111,6 @@ class Mtof_hits(Display, Threading):
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
         self.fixed_hit_arr_size = fixed_hit_arr_size
-        self.index = 0
         # Init Figure from Display class:
         self.init_fig(figsize=figsize, dpi=dpi)
 
@@ -133,6 +132,7 @@ class Mtof_hits(Display, Threading):
         self.fig.legend()  # also you can do: self.ax.legend()
 
     def init_fixed_hit_arr(self,):
+        self.index = 0
         for tdc in self.tdcs_obj_list:
             tdc.fixed_hit_arr = np.zeros(self.fixed_hit_arr_size, dtype=np.int16)
     
@@ -151,5 +151,5 @@ class Mtof_hits(Display, Threading):
         self.update()
         print("R hit")
         # render to the st app
-        self.st_plot()
+        #self.st_plot()
         sleep(self.delay)

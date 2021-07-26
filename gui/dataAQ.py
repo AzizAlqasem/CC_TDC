@@ -53,11 +53,14 @@ class Main:
         if self.is_tdc_connected == False:
             self.TDC_connect()
         # Main thread
-        self.dcounter.start_thread(
-            chiled_threads=[self.tof, self.mtof_stream, self.mtof_hit]
-            )
-        # ^ now all display threads will start once dcounter start
-        self.is_running = True
+        if self.is_running == False:
+            self.dcounter.start_thread(
+                chiled_threads=[self.tof, self.mtof_stream, self.mtof_hit]
+                )
+            # ^ now all display threads will start once dcounter start
+            self.is_running = True
+        else:
+            print("The app is already running!")
 
     def stop(self):
         self.dcounter.terminate_thread(
@@ -75,7 +78,7 @@ class Main:
         self.mtof_hit.init_fixed_hit_arr()
         for d in [self.tof, self.mtof_stream, self.mtof_hit]:
             d.update()
-            d.st_plot()
+            #d.st_plot()
 
 
     def TDC_connect(self):
