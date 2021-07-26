@@ -93,5 +93,5 @@ class Random_data_test(ReadOut):
         
 
 
-#read_out = ReadOut()
-read_out = Random_data_test(2)
+read_out = ReadOut()
+#read_out = Random_data_test(2)
