@@ -1,6 +1,7 @@
 from core.daq_custom_classes import DCounter
 from core.display_custom_classes import ToF, Mtof_stream, Mtof_hits
 from interface.read_out import read_out
+from settings.settings import settings
 
 class Main:
 
@@ -44,6 +45,8 @@ class Main:
     def reload(self,): #update settings
         if self.is_tdc_connected == False:
             self.__init__()
+            settings.__init__()
+
 
     def add_handler(self, tof_hand, s_hand, h_hand):
         # A figure handler must be added

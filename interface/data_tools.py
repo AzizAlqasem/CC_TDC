@@ -15,11 +15,11 @@ def raw_data_to_channel_arr(
     return data_ar[:,1:-1]
 
 
-def channel_arr_to_count_ar(channel_arr, min_count_value=0, max_count_value=2048):
+def channel_arr_to_count_ar(channel_arr, min_count_value=0, max_count_value=2048): #* max_count is variable => should be in the settings
     data_ar = channel_arr.flatten()
     cond = (data_ar>=min_count_value) & (data_ar<max_count_value)   # [min, ..., max)  
     data_ar = data_ar[cond]
-    return _count_to_bins(data_ar, size=max_count_value - min_count_value)
+    return _count_to_bins(data_ar, size=max_count_value - min_count_value), data_ar.size
 
 
 def _count_to_bins(data_ar, size):

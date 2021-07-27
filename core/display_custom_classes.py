@@ -6,7 +6,7 @@ import numpy as np
 ## Time Of Flight custom Class
 class ToF(Display, Threading):
 
-    def __init__(self, tdcs_obj_list, figsize=[6,5], dpi=120, delay=1):
+    def __init__(self, tdcs_obj_list, figsize=[4,3], dpi=90, delay=1):
         self.auto_scale = True
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
@@ -27,9 +27,9 @@ class ToF(Display, Threading):
             self.prev_lines.append(prev_line)
 
         # Fig info:
-        self.ax.set_title = "Time OF Flight"
-        self.ax.set_xlabel = "Time (ns)"
-        self.ax.set_ylabel = "Yeild (a.u.)"
+        self.ax.set_title("Time OF Flight")
+        self.ax.set_xlabel("Time (ns)")
+        self.ax.set_ylabel("Yeild (a.u.)")
 
         self.fig.legend()  # also you can do: self.ax.legend()
 
@@ -51,7 +51,7 @@ class ToF(Display, Threading):
         # render to the st app
         #self.st_plot()
         sleep(self.delay)
-        print("R TOF")
+        #print("R TOF")
 
     def show_prev_arr(self, ON=True):
         for i, tdc in enumerate(self.tdcs_obj_list):
@@ -66,7 +66,7 @@ class ToF(Display, Threading):
 ## Monitor TOF
 class Mtof_stream(Display, Threading):
 
-    def __init__(self, tdcs_obj_list, figsize=[4, 2], dpi=120, delay=1):
+    def __init__(self, tdcs_obj_list, figsize=[4, 2], dpi=90, delay=1):
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay
         # Init Figure from Display class:
@@ -82,32 +82,31 @@ class Mtof_stream(Display, Threading):
             self.lines.append(sublines)
 
         # Fig info:
-        self.ax.set_title = "Channels Data"
-        self.ax.set_xlabel = "Laser Shot (Updating ..)"
-        self.ax.set_ylabel = "TDC Count"
+        self.ax.set_title("Channels Data")
+        self.ax.set_xlabel("Laser Shot (Updating ..)")
+        self.ax.set_ylabel("TDC Count")
 
-        self.ax.set_ylim(-10, 2100)
-        
+        self.ax.set_ylim(-10, 4100)
 
     def update(self,):
         # Read TDC arr and update line plot  
         for i, tdc in enumerate(self.tdcs_obj_list):
-            for line in self.lines[i]:
-                line.set_ydata(tdc.channel_arr[:tdc.channel_window_size, i])
+            for j, line in enumerate(self.lines[i]):
+                line.set_ydata(tdc.channel_arr[:tdc.channel_window_size, j])
 
     def _run(self):
         self.update()
         # plot
         #self.st_plot()
         sleep(self.delay)
-        print("R Stream")
+        #print("R Stream")
 
 
 
 ## Monitor TOF (avg Hit/shot)
 class Mtof_hits(Display, Threading):
 
-    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=120, delay=1, fixed_hit_arr_size=100):        
+    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=90, delay=1, fixed_hit_arr_size=100):        
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
         self.fixed_hit_arr_size = fixed_hit_arr_size
@@ -123,13 +122,13 @@ class Mtof_hits(Display, Threading):
             self.lines.append(line)
 
         # Fig info:
-        self.ax.set_title = "Average ions hit per laser shot"
-        self.ax.set_ylabel = "hit/shot"
-        self.ax.set_xlabel = "Time (updating ..)"
+        self.ax.set_title("Average ions hit per laser shot")
+        self.ax.set_ylabel("hit/shot")
+        self.ax.set_xlabel("Time (updating ..)")
 
-        self.ax.set_ylim(-0.5, 8.5)
+        self.ax.set_ylim(-1, 9)
         self.ax.set_xlim(0, self.fixed_hit_arr_size)
-        self.fig.legend()  # also you can do: self.ax.legend()
+        self.ax.legend()  # also you can do: self.ax.legend()
 
     def init_fixed_hit_arr(self,):
         self.index = 0
@@ -149,7 +148,7 @@ class Mtof_hits(Display, Threading):
 
     def _run(self):
         self.update()
-        print("R hit")
+        #print("R hit")
         # render to the st app
         #self.st_plot()
         sleep(self.delay)

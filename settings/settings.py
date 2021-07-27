@@ -41,21 +41,23 @@ class Settings:
                     value = value.split(",")
                     if not value[-1]: # ["abc",""]
                         value = value[:-1]
+                else:
+                    value = [value]
             self.settings_dict[key] = value
     
     def generate_commands(self):
         target_modules = self.get_setting("target_modules")
         commands = []
         if "TDC2228A" in target_modules:
-            N = self.get_setting("TDC_2228A_slot_number")
-            noch = self.get_setting("TDC_2228A_nodch")
+            N = self.get_setting("TDC2228A_slot_number")
+            noch = self.get_setting("TDC2228A_nodch")
             for A in range(noch):  # Read all channels
                 commands.append([N, A, 0])
             commands.append([N, 0, 9]) #commands to clear Data
 
         if "TDC4208" in target_modules:
-            N = self.get_setting("TDC_4208_slot_number")
-            noch = self.get_setting("TDC_4208_nodch")
+            N = self.get_setting("TDC4208_slot_number")
+            noch = self.get_setting("TDC4208_nodch")
             for A in range(noch):  # Read all channels
                 commands.append([N, A, 0])
             commands.append([N, 0, 9]) #commands to clear Data

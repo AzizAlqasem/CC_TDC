@@ -19,8 +19,10 @@ def main_page():
         h_hand = st.pyplot(main.mtof_hit.fig)
     # Tot avg hit
     avg_hits = fc2.empty()
+    txt = ""
     for name, avh in main.dcounter.get_tot_avg_hit():
-        avg_hits.write(f"{name}: Average hit/shot  =  {round(avh,3)}\n")
+        txt += f"{name}: Average hit/shot  =  {round(avh,3)}\n"
+    avg_hits.write(txt)
     # Tot Laser shot
     laser_shots = fc2.empty()
     laser_shots.write(f"Total Laser shots  =  {main.dcounter.tot_laser_shot}\n")
@@ -51,9 +53,12 @@ def main_page():
         main.tof.show_prev_arr(False)
 
     # Power:
-    power_ang = sc6.slider("Angle", min_value=0, max_value=360, value=0, step=1)
+    power_ang = sc6.slider("Motor Controller (Angle)", min_value=0, max_value=360, value=0, step=1)
 
     # Side bar: Controls and status
+    st.sidebar.write("### CC-TDC")
+    sb_0, sb_1, sb_2 = st.sidebar.beta_columns([1,1,1])
+
     st.sidebar.write("### Controol")
     _,sb0, sb1, _ = st.sidebar.beta_columns([1,2,2,1])
     _,sb2, sb3, _ = st.sidebar.beta_columns([1,2,2,1])
@@ -67,13 +72,13 @@ def main_page():
     if sb3.button("Clear"):
         main.clear()
     
-    if st.button("TDC_Connect"):
+    if sb_0.button("Connect"):
         main.TDC_connect()
     
-    if st.button("TDC_Close"):
+    if sb_1.button("Close"):
         main.TDC_close()
 
-    if st.button("Reload"):
+    if sb_2.button("Reload"):
         main.reload()
 
     # Theird Row: Experiment info
@@ -110,6 +115,12 @@ def main_page():
         tof_hand.pyplot(main.tof.fig)
         s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
+
+        txt = ""
+        for name, avh in main.dcounter.get_tot_avg_hit():
+            txt += f"{name}: Average hit/shot  =  {round(avh,3)}\n"
+        avg_hits.write(txt)
+        laser_shots.write(f"Total Laser shots  =  {main.dcounter.tot_laser_shot}\n")
         sleep(update_delay)
     
     tof_hand.pyplot(main.tof.fig)

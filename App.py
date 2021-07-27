@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 
-st.title("Time OF Flight Experiment")
+st.write("## Time of Flight Experiment")
 
 
 select_pages = st.sidebar.selectbox(

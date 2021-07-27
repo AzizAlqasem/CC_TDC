@@ -7,7 +7,7 @@ def main():
 
     st.write("### TDC Settings")
     col1, col2, col3, col4, col5 = st.beta_columns(5)
-    tdc_n = col1.radio('TDC Model', ['TDC 2228A','TDC 4208','Else'])
+    tdc_n = col1.radio('TDC Model', ['TDC 2228A','TDC 4208','Dual'])
     slot_n = col4.text_input('Module Slot Number', '20')
     reso = col2.radio('TDC Resolution (PICSEC)', [50, 100, 250], help="A manual switch on the TDC must be turend first")
     bit_dy_range = col3.radio('Bit Daynamic Range', [11, 8], help="A manual switch on the TDC must be turend first")

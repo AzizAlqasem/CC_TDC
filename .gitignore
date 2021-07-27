@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# CC-TDC
+# No Data
+*temp.csv
+# No pyxxusb
+interface/pyxxusb/*

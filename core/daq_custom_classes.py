@@ -38,22 +38,24 @@ class DCounter(Threading):
             
     def _run(self,):
         # get data fron TDC
-        channel_data_dict, number_of_data_chunck = read_out.get_data()
-        # update
-        for tdc in self.tdcs_obj_list:
-            ch_arr, data_arr = channel_data_dict[tdc.name]
-            tdc.arr += data_arr
-            tdc.channel_arr = ch_arr 
-            tdc.avg_hit_list.append(data_arr.size/number_of_data_chunck)
-        self.tot_laser_shot += number_of_data_chunck
-        
-        if self.loop_counter % self.auto_save_delay == 0:
+        data = read_out.get_data()
+        if data:   
+            channel_data_dict, number_of_data_chunck = data
+            # update
             for tdc in self.tdcs_obj_list:
-                tdc.auto_save()
-        
-        self.loop_counter += 1
-        print("R DAQ")
-        sleep(0.9)
+                ch_arr, data_arr, avg_hit = channel_data_dict[tdc.name]
+                tdc.arr += data_arr
+                tdc.channel_arr = ch_arr 
+                tdc.avg_hit_list.append(avg_hit)
+            self.tot_laser_shot += number_of_data_chunck
+            
+            if self.loop_counter % self.auto_save_delay == 0:
+                for tdc in self.tdcs_obj_list:
+                    tdc.auto_save()
+            
+            self.loop_counter += 1
+            #print("R DAQ")
+            sleep(0.5)
 
     def save(self, path, info):
         for tdc in self.tdcs_obj_list:
