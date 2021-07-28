@@ -10,7 +10,7 @@ class ReadOut:
     
     def init(self,):
         self.cc_usb = cci.CC_USB(
-        commands=settings.generate_commands, time_out_ms=settings.get_setting("cc_time_out_ms"), 
+        commands=settings.generate_commands(), time_out_ms=settings.get_setting("cc_time_out_ms"), 
         LAM=settings.get_setting("LAM"), 
         trig_delay_us=settings.get_setting("trig_delay_us"), 
         buffer_opt=settings.get_setting("buffer_opt")

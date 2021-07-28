@@ -108,10 +108,5 @@ class Display: #* remove container
     def init_fig(self, figsize=None, dpi=90):
         self.fig, self.ax = plt.subplots(figsize=figsize, dpi=dpi)
 
-    # def add_handler(self, handler):
-    #     self.handler = handler
-
-    # def st_plot(self):
-    #     self.handler.pyplot(self.fig)
 
 

@@ -7,8 +7,6 @@ main = Main()
 
 
 
-
-
 def main_page():
     # First Row: Figures
     fc1, fc2 = st.beta_columns([5,3])
@@ -19,8 +17,11 @@ def main_page():
         h_hand = st.pyplot(main.mtof_hit.fig)
     # Tot avg hit
     avg_hits = fc2.empty()
-    for name, avh in main.dcounter.get_tot_avg_hit():
-        avg_hits.write(f"{name}: Average hit/shot  =  {round(avh,3)}\n")
+    avg_hits.write(
+        "".join(
+        f"{name}: Average hit/shot  =  {round(avh,3)}\n"
+        for name, avh in main.dcounter.get_tot_avg_hit())
+    )
     # Tot Laser shot
     laser_shots = fc2.empty()
     laser_shots.write(f"Total Laser shots  =  {main.dcounter.tot_laser_shot}\n")
@@ -60,16 +61,16 @@ def main_page():
 
     if sb0.button("Run"):
         main.run()
-    
+
     if sb1.button("Stop"):
         main.stop()
 
     if sb3.button("Clear"):
         main.clear()
-    
+
     if st.button("TDC_Connect"):
         main.TDC_connect()
-    
+
     if st.button("TDC_Close"):
         main.TDC_close()
 
@@ -111,7 +112,7 @@ def main_page():
         s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
         sleep(update_delay)
-    
+
     tof_hand.pyplot(main.tof.fig)
     s_hand.pyplot(main.mtof_stream.fig)
     h_hand.pyplot(main.mtof_hit.fig)
