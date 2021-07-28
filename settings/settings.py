@@ -23,7 +23,7 @@ class Settings:
             key = target + "_" + key
         self.settings_dict[key] = str(value)
 
-    def _load_settings(self, path='settings/Default_settings.txt'):
+    def _load_settings(self, path=r'settings/Default_settings.txt'):
         with open(path, 'r') as sf:
             setting_text = sf.read().replace('\r','')
         self.settings_dict = {}
