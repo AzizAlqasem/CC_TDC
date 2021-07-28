@@ -132,5 +132,6 @@ dmypy.json
 # CC-TDC
 # No Data
 *temp.csv
+TDC2228A_temp.csv
 # No pyxxusb
 interface/pyxxusb/*

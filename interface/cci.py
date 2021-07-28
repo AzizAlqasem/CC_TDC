@@ -3,7 +3,13 @@ the pyxxusb which is a pyhton wrape to the main C/C++
 module made by the manufacture.
 
 """
-from interface.pyxxusb import _pyxxusb as pycc # Here it is used only for comunicationg with the CC-USB
+try:
+    from interface.pyxxusb import _pyxxusb as pycc # Here it is used only for comunicationg with the CC-USB
+except Exception as e:
+    print(e)
+    print("pyxxusb lib works only with python 32bit")
+    print("The PC should be connected to the cc-usb")
+
 from interface._tools import generate_stack, stack_as_longArray
 
 

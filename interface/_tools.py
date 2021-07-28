@@ -1,4 +1,9 @@
-from interface.pyxxusb import _pyxxusb as pycc
+try:
+    from interface.pyxxusb import _pyxxusb as pycc # Here it is used only for comunicationg with the CC-USB
+except Exception as e:
+    print(e)
+    print("pyxxusb lib works only with python 32bit")
+    print("The PC should be connected to the cc-usb")
 
 
 def gen_command(N, A, F):
