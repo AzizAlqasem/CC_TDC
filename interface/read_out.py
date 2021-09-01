@@ -1,4 +1,3 @@
-#from interface import cci
 from settings.settings import settings
 from interface.data_tools import raw_data_to_channel_arr, channel_arr_to_count_ar
 import numpy as np
@@ -75,7 +74,7 @@ class ReadOut:
 
 class Random_data_test(ReadOut):
     def __init__(self, nom=1):
-        self.nom = nom #number of module
+        self.nom = nom #number of modules
         self.target_modules = settings.get_setting("target_modules")
     
     def init(self,):

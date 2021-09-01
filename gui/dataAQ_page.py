@@ -3,15 +3,14 @@ from gui.dataAQ import Main
 from time import sleep
 import os
 
+
 main = Main()
-
-
 
 
 
 def main_page():
     # First Row: Figures
-    fc1, fc2 = st.beta_columns([5,3])
+    fc1, fc2 = st.columns([5,3])
     with fc1:
         tof_hand = st.pyplot(main.tof.fig)
     with fc2:
@@ -29,8 +28,8 @@ def main_page():
 
 
     # Second Row: Fig settings
-    sc0, sc1, _,  sc2 = st.beta_columns([2, 6, 1, 6])
-    sc3, sc4, sc5, sc6 = st.beta_columns([1, 3, 2, 4])
+    sc0, sc1, _,  sc2 = st.columns([2, 6, 1, 6])
+    sc3, sc4, sc5, sc6 = st.columns([1, 3, 2, 4])
     # y-scale
     yscale = sc0.radio("Y-scale",("linear", "log"))
     main.adj_y_scale(yscale)
@@ -57,11 +56,11 @@ def main_page():
 
     # Side bar: Controls and status
     st.sidebar.write("### CC-TDC")
-    sb_0, sb_1, sb_2 = st.sidebar.beta_columns([1,1,1])
+    sb_0, sb_1, sb_2 = st.sidebar.columns([1,1,1])
 
     st.sidebar.write("### Controol")
-    _,sb0, sb1, _ = st.sidebar.beta_columns([1,2,2,1])
-    _,sb2, sb3, _ = st.sidebar.beta_columns([1,2,2,1])
+    _,sb0, sb1, _ = st.sidebar.columns([1,2,2,1])
+    _,sb2, sb3, _ = st.sidebar.columns([1,2,2,1])
 
     if sb0.button("Run"):
         main.run()
@@ -82,8 +81,8 @@ def main_page():
         main.reload()
 
     # Theird Row: Experiment info
-    inpcol1, inpcol2, inpcol3 = st.beta_columns(3)
-    inpcol4, inpcol5, inpcol6 = st.beta_columns(3)
+    inpcol1, inpcol2, inpcol3 = st.columns(3)
+    inpcol4, inpcol5, inpcol6 = st.columns(3)
     proj = inpcol1.text_input('Project Name', 'He ATI')
     expr = inpcol2.text_input('Experiment Name', 'High int. 800nm')
     target_n = inpcol3.text_input('Target Name', 'He')
