@@ -53,7 +53,7 @@ class Settings:
         tot_nodch = sum(int(self.get_setting('nodch', target=target)) for target in self.targets)
         self.settings_dict["tot_nodch"] = tot_nodch
 
-        # Array size:
+        # Array size: to carry the data comming from the controller.
         for target in self.targets:
             minv = self.get_setting('min_count_value', target=target)
             maxv = self.get_setting('max_count_value', target=target)
