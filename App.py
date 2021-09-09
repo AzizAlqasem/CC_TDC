@@ -14,7 +14,7 @@ st.write("## Time of Flight Experiment")
 
 
 select_pages = st.sidebar.selectbox(
-    "Pages", ("DataAQ", "T-E Conversion", "Settings", "Test TDC","Help")
+    "Pages", ("DataAQ", "Settings", "T-E Conversion", "Help")
 )
 
 
