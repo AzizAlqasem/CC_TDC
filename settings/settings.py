@@ -1,9 +1,9 @@
-from tools.data_flow import auto_type_conv
-
+from tools.data_flow import auto_type_conv, parse_config_file
 
 
 SUPPORTED_TARGETS = ["TDC2228A", "TDC4208"]
-POST_CALCULATIONS = ["tot_nodch", "arr_size", 'start_marker']
+POST_CALCULATIONS = ["tot_nodch", "arr_size", 'start_marker'] # cal done after reading the settings
+
 
 class Settings:
 
@@ -26,24 +26,7 @@ class Settings:
     def _load_settings(self, path='settings/Default_settings.txt'):
         with open(path, 'r') as sf:
             setting_text = sf.read().replace('\r','')
-        self.settings_dict = {}
-        for line in setting_text.split('\n'):
-            if line.startswith("#") or "=" not in line: #This is valued for header only
-                continue
-            end = line.find('#') 
-            if end == -1:
-                end = None 
-            line = line[ : end].replace(' ', '')
-            key, value = line.split("=")
-            if value.startswith("[") or "," in value:
-                value = value.replace("[",'').replace("]", '')
-                if ',' in value:
-                    value = value.split(",")
-                    if not value[-1]: # ["abc",""]
-                        value = value[:-1]
-                else:
-                    value = [value]
-            self.settings_dict[key] = value
+        self.settings_dict = parse_config_file(setting_text)
     
     def generate_commands(self):
         target_modules = self.get_setting("target_modules")
