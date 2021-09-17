@@ -1,6 +1,7 @@
 import streamlit as st
 from gui import dataAQ_page
 from gui import settings_page
+from gui import TEC_page
 
 st.set_page_config(
      page_title="Time Of Flight",
@@ -23,6 +24,9 @@ if select_pages == "DataAQ":
 
 elif select_pages == "Settings":
     settings_page.main()
+
+elif select_pages == "T-E Conversion":
+    TEC_page.main()
 
 else:
     pass

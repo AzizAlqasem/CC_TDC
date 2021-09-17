@@ -51,3 +51,21 @@ def parse_config_file(text:str) -> dict:
                 value = [value]
         config_dict[key] = value
     return config_dict
+
+
+def header_to_dict(file_str):
+    """ Parse data (.txt) filse heasers to dict
+    """
+    hd = {}
+    for line in file_str.split('\n'):
+        if line.startswith("#") and ":" in line:
+            line = line.replace('# ','').replace('\r','')
+            parts = line.split(":")
+            key = parts[0]
+            if len(parts) == 2:
+                value = parts[1]
+            else:
+                value = ' '.join(parts[1:])
+            hd[key] = value
+        else: #This is valued for header only
+            return hd
