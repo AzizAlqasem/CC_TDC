@@ -24,7 +24,7 @@ def channel_arr_to_count_ar(channel_arr, min_count_value=0, max_count_value=2048
 
 def _count_to_bins(data_ar, size):
     count_ar = np.zeros(size, dtype=np.int64)
-    for i in range(len(data_ar)):
+    for i in range(len(data_ar)):   #* why not 'size'
         bin = data_ar[i]
         count_ar[bin] += 1
     return count_ar

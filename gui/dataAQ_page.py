@@ -3,6 +3,8 @@ from gui.dataAQ import Main
 from time import sleep
 import os
 
+st.columns = st.beta_columns
+st.sidebar.columns = st.sidebar.beta_columns
 
 main = Main()
 

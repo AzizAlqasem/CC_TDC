@@ -1,6 +1,8 @@
 import streamlit as st
 from settings.settings import settings
 
+st.columns = st.beta_columns
+
 # Settings will change the temp variables
 # Default variables are change by the .txt file.
 
@@ -17,7 +19,7 @@ def main():
     settings.set_setting('target_modules', value)
 
     for tdc in value:
-        slot_n = col4.text_input(f'{tdc} Slot Number', '20',  max_chars=2)
+        slot_n = col4.text_input(f'{tdc} Slot Number', '19',  max_chars=2)
         settings.set_setting('slot_number', slot_n, target=tdc)
 
     cc_time_out = col5.text_input('CC-USB Time Out (ms)', '100')

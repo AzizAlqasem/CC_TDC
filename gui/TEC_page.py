@@ -3,6 +3,7 @@ import pandas as pd
 
 from core.time_energy_conv import TEC
 
+st.columns = st.beta_columns
 
 tec = TEC()
 
