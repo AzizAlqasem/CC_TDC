@@ -46,10 +46,10 @@ class TEC:
     def __init__(self):
         # Init Time fig
         self.fig_t, self.ax_t, self.line_t = self.add_fig(
-            title='Time of Flight', xlabel='TOF (sec)', ylabel='Yeild (a.u.)', xlim=(0, 100e-9), ylim=(10e-9,1))
+            title='Time of Flight', xlabel='TOF (sec)', ylabel='Yeild (a.u.)', xlim=(0, 100e-9), ylim=(10e-16,1))
         # Init E Fig
         self.fig_e, self.ax_e, self.line_e = self.add_fig(
-            title='ATI Spectra', xlabel='Electron Energy (ev)', ylabel='Yeild (a.u.)', xlim=(0, 100), ylim=(10e-6, 1))
+            title='ATI Spectra', xlabel='Electron Energy (ev)', ylabel='Yeild (a.u.)', xlim=(0, 100), ylim=(10e-8, 1))
         # Init Vlines
         self.vls = self.ax_e.vlines([0],0,0)
         
@@ -78,6 +78,8 @@ class TEC:
         if kind == 'st':
             self.file_str = file.read().decode("utf-8")
             self.time, self.count = np.loadtxt(StringIO(self.file_str), delimiter=',').T
+            self.time = self.time*1e-9
+            self.count = self.count / self.count.max()    # Normalization
         elif kind == 'txt':
             pass
         elif kind == 'npy':

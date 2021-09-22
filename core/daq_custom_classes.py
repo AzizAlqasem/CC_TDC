@@ -29,10 +29,10 @@ class DCounter(Threading):
         self.tot_laser_shot = 0
         self.loop_counter = 0
 
-    def get_tot_avg_hit(self): # redendencies with DAQ
+    def get_tot_avg_hit(self, last=None): # redendencies with DAQ
         tot_avg_hit_list = []
         for tdc in self.tdcs_obj_list:
-            avg = tdc.get_tot_avg_hit()
+            avg = tdc.get_tot_avg_hit(last=last)
             tot_avg_hit_list.append([tdc.name, avg])
         return tot_avg_hit_list
             

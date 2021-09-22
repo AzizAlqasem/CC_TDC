@@ -56,7 +56,7 @@ class ToF(Display, Threading):
     def show_prev_arr(self, ON=True):
         for i, tdc in enumerate(self.tdcs_obj_list):
             if ON:
-                self.prev_lines[i].set_ydata(tdc.prev_arr)
+                self.prev_lines[i].set_ydata(tdc.prev_arr/tdc.prev_arr.max())
                 self.prev_lines[i].set_linestyle("--")  # Visible
             else:
                 self.prev_lines[i].set_linestyle("None") # Invisible

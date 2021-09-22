@@ -81,8 +81,12 @@ class DAQ:
         self.tdc_t_shift = self.slop * self.channel + self.offset # unit in [ns]
         self.time_arr = self.time_resolution * np.arange(self.size, dtype=self.type) + self.tdc_t_shift #ns
 
-    def get_tot_avg_hit(self,):
-        return np.average(self.avg_hit_list[1:]) if self.avg_hit_list else np.nan
+    def get_tot_avg_hit(self, last=None):
+        if last:
+            last = -last
+        else:
+            last = 1 # excluding the first 0 element
+        return np.average(self.avg_hit_list[last:]) if self.avg_hit_list else np.nan
 
     def auto_save(self):
         with open(self.name+"_temp.csv", 'w') as f:
