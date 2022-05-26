@@ -135,3 +135,4 @@ dmypy.json
 TDC2228A_temp.csv
 # No pyxxusb
 interface/pyxxusb/*
+.vscode
