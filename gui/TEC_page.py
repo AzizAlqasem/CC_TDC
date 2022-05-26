@@ -14,12 +14,12 @@ def main():
     tec.ax_t.set_ylim(ylim)
     xlim = st.slider("X Scale", min_value=0, max_value=400, value=(0,100), step=1, key='tof2')
     tec.ax_t.set_xlim(xlim)
-    
+
 
     hand_e = st.pyplot(tec.fig_e)
     ylim = st.slider("Y Scale", min_value=0.0, max_value=1.0, value=(1e-6,1.0), step=1e-4, key='eng1')
     tec.ax_e.set_ylim(ylim)
-    xlim = st.slider("X Scale", min_value=0, max_value=400, value=(0,100), step=1, key='eng2')
+    xlim = st.slider("X Scale", min_value=0, max_value=500, value=(0,100), step=1, key='eng2')
     tec.ax_e.set_xlim(xlim)
 
 
@@ -30,7 +30,7 @@ def main():
     L = L/100
     shift = st.slider("Shift (ev)", min_value=-100.0, max_value=50.0, value=0.0, step=0.01)
     wavelength = st.number_input("Wavelength (nm)", value=700.0)
-    
+
     # Load Data
     uploaded_file = st.sidebar.file_uploader("Choose a TOF csv file")
     if st.sidebar.button("Load Data"):
