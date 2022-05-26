@@ -1,3 +1,6 @@
+
+# t2E was mainly written by Kent
+
 import matplotlib.pyplot as plt
 import numpy as np
 from io import StringIO
@@ -9,7 +12,7 @@ CHARGE = 1.602176634 * 10**-19  # electron charge
 
 #expensive function (apply numba)
 @njit
-def t2E(time:np.ndarray, count:np.ndarray, L=0.53, t0=1.92e-8, E_max=400): # t2E was mainly written by Kent
+def t2E(time:np.ndarray, count:np.ndarray, L=0.53, t0=1.92e-8, E_max=400): 
     """
     converting time to energy
     time (arr) is taken from the original data (not modified)
