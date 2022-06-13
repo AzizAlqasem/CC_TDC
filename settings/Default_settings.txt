@@ -6,11 +6,11 @@ cc_time_out_ms = 100
 LAM = 0
 trig_delay_us = 100
 buffer_opt = 0                      # Buffer option (0 for largest buffer size: 4K ) - see CC_USB Manual
-marker = True 
+marker = True
 marker_size = 2                     # Tow nubers before and after channels data [9, ... data from TDC ... , -1]
 #start_marker = 9      # [part of post_calculations] define the start of chunck reading = the nuber of data point for each loop
 end_marker = -1                     # define the end of chunck reading
-#target_modules = [TDC2228A,TDC4208]         # [TDC2228A,TDC4208] for "dual" mode 
+#target_modules = [TDC2228A,TDC4208]         # [TDC2228A,TDC4208] for "dual" mode
 target_modules = [TDC2228A]
 #target_modules = [TDC4208]
 
@@ -19,13 +19,13 @@ target_modules = [TDC2228A]
 TDC2228A_slot_number = 19
 TDC2228A_input_channel_number = 0
 TDC2228A_nodch = 8                 # number_of_data_channels
-TDC2228A_time_resolution = 0.250   # ns
-TDC2228A_time_slop = 0.0474 
+TDC2228A_time_resolution = 0.050   # ns
+TDC2228A_time_slop = 0.0474
 TDC2228A_time_offset = 5.12
 TDC2228A_min_count_value = 0
 TDC2228A_max_count_value = 2048
 
-## TDC4208 Settings 
+## TDC4208 Settings
 TDC4208_slot_number = 15
 TDC4208_input_channel_number = 0
 TDC4208_nodch = 8                 # number_of_data_channels

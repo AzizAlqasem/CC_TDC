@@ -24,21 +24,21 @@ class Main:
         self.h_dpi = 120
 
         self.y_scale = 'linear' # log
-        self.xlim = (0.0, 100.0)
-        self.ylim = (0.0, 1.0)
-    
+        self.xlim = (0.0, 1000.0)
+        self.ylim = (1e-8, 1.0)
+
     def init_obj(self):
         read_out.init()
 
         self.dcounter = DCounter()
-        
-        self.tof = ToF(self.dcounter.tdcs_obj_list, 
+
+        self.tof = ToF(self.dcounter.tdcs_obj_list,
                     figsize=self.tof_fig_size, dpi=self.tof_dpi)
-        
-        self.mtof_stream = Mtof_stream(self.dcounter.tdcs_obj_list, 
+
+        self.mtof_stream = Mtof_stream(self.dcounter.tdcs_obj_list,
                     figsize=self.s_fig_size, dpi=self.s_dpi)
-        
-        self.mtof_hit = Mtof_hits(self.dcounter.tdcs_obj_list, 
+
+        self.mtof_hit = Mtof_hits(self.dcounter.tdcs_obj_list,
                     figsize=self.h_fig_size, dpi=self.h_dpi)
 
 
@@ -54,7 +54,7 @@ class Main:
         self.mtof_stream.add_handler(s_hand)
         self.mtof_hit.add_handler(h_hand)
 
-        
+
     def run(self):
         if self.is_tdc_connected == False:
             self.TDC_connect()

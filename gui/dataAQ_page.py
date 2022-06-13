@@ -33,17 +33,17 @@ def main_page():
     sc0, sc1, _,  sc2 = st.columns([2, 6, 1, 6])
     sc3, sc4, sc5, sc6 = st.columns([1, 3, 2, 4])
     # y-scale
-    yscale = sc0.radio("Y-scale",("linear", "log"))
+    yscale = sc0.radio("Y-scale",("log","linear"))
     main.adj_y_scale(yscale)
 
     # x and y lim
-    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=400.0, value=(0.0,100.0), step=0.5)
-    y_lim = sc2.slider("Y-lim", min_value=1e-6, max_value=1.0, value=(1e-6,1.0), step=5e-4)
+    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=1000.0, value=(0.0,100.0), step=0.5)
+    y_lim = sc2.slider("Y-lim", min_value=1e-8, max_value=1.0, value=(1e-8,1.0), step=5e-4)
     main.adj_xlim(x_lim)
     main.adj_ylim(y_lim)
 
     # Max laser shot
-    max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 1000)
+    max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 5000)
 
     # Update rate (delay) (max = 1 sec)
     update_delay = sc5.number_input("Update delay (sec)", value=1)
@@ -66,16 +66,16 @@ def main_page():
 
     if sb0.button("Run"):
         main.run()
-    
+
     if sb1.button("Stop"):
         main.stop()
 
     if sb3.button("Clear"):
         main.clear()
-    
+
     if sb_0.button("Connect"):
         main.TDC_connect()
-    
+
     if sb_1.button("Close"):
         main.TDC_close()
 
@@ -123,7 +123,7 @@ def main_page():
         avg_hits.write(txt)
         laser_shots.write(f"Total Laser shots  =  {main.dcounter.tot_laser_shot}\n")
         sleep(update_delay)
-    
+
     tof_hand.pyplot(main.tof.fig)
     s_hand.pyplot(main.mtof_stream.fig)
     h_hand.pyplot(main.mtof_hit.fig)
