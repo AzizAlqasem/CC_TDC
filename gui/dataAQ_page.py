@@ -21,7 +21,7 @@ def main_page():
     # Tot avg hit
     avg_hits = fc2.empty()
     txt = ""
-    for name, avh in main.dcounter.get_tot_avg_hit(last=2):
+    for name, avh in main.dcounter.get_tot_avg_hit(last=10):
         txt += f"{name}: Average hit/shot  =  {round(avh,3)}\n"
     avg_hits.write(txt)
     # Tot Laser shot
@@ -38,8 +38,11 @@ def main_page():
 
     # x and y lim
     x_lim = sc1.slider("X-lim", min_value=0.0, max_value=1000.0, value=(0.0,100.0), step=0.5)
-    y_lim = sc2.slider("Y-lim", min_value=1e-8, max_value=1.0, value=(1e-8,1.0), step=5e-4)
+    y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-9,0), step=1)
     main.adj_xlim(x_lim)
+    y_lim=list(y_lim)
+    y_lim[0] = 10**(y_lim[0])
+    y_lim[1] = 10**(y_lim[1])
     main.adj_ylim(y_lim)
 
     # Max laser shot
@@ -118,7 +121,7 @@ def main_page():
         h_hand.pyplot(main.mtof_hit.fig)
 
         txt = ""
-        for name, avh in main.dcounter.get_tot_avg_hit():
+        for name, avh in main.dcounter.get_tot_avg_hit(last=10):
             txt += f"{name}: Average hit/shot  =  {round(avh,3)}\n"
         avg_hits.write(txt)
         laser_shots.write(f"Total Laser shots  =  {main.dcounter.tot_laser_shot}\n")

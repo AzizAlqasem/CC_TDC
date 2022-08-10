@@ -7,12 +7,12 @@ class ReadOut:
 
     def __init__(self):
         pass
-    
+
     def init(self,):
         self.cc_usb = cci.CC_USB(
-        commands=settings.generate_commands(), time_out_ms=settings.get_setting("cc_time_out_ms"), 
-        LAM=settings.get_setting("LAM"), 
-        trig_delay_us=settings.get_setting("trig_delay_us"), 
+        commands=settings.generate_commands(), time_out_ms=settings.get_setting("cc_time_out_ms"),
+        LAM=settings.get_setting("LAM"),
+        trig_delay_us=settings.get_setting("trig_delay_us"),
         buffer_opt=settings.get_setting("buffer_opt")
         )
         self.target_modules = settings.get_setting("target_modules") #list
@@ -23,7 +23,7 @@ class ReadOut:
                 )
             self.cc_usb.connect_to_module(module)
             self.module_list.append(module)
-        
+
     def connect(self):
         self.cc_usb.stack_write()
         self.cc_usb.write_LAM_mask()
@@ -41,13 +41,13 @@ class ReadOut:
         if not self.raw_data:
             self.raw_data = None
         #print(self.raw_data)
-    
+
     def get_number_of_data_chunck(self):
         self.number_of_data_chunck = self.raw_data[0]
-    
+
     def get_channel_arr(self,):
         self.channel_data_arr = raw_data_to_channel_arr(self.raw_data)
-    
+
     def _split_channel_arr_between_modules(self,):
         self.channel_data_dict = {}
         s = 0
@@ -55,6 +55,7 @@ class ReadOut:
             nodch = settings.get_setting('nodch', target=module)
             e = s + nodch
             ch_arr = self.channel_data_arr[:, s:e] #*
+            # print(np.average(ch_arr[:,0])) #* For debuging
             mcv = settings.get_setting('min_count_value', target=module)
             mxcv = settings.get_setting('max_count_value', target=module)
             data_arr, row_data_arr_size = channel_arr_to_count_ar(ch_arr, mcv, mxcv)
@@ -76,7 +77,7 @@ class Random_data_test(ReadOut):
     def __init__(self, nom=1):
         self.nom = nom #number of modules
         self.target_modules = settings.get_setting("target_modules")
-    
+
     def init(self,):
         pass # overwirte
     def connect(self,):
@@ -93,7 +94,7 @@ class Random_data_test(ReadOut):
         self.raw_data[1:][::cs] = sm
         self.raw_data[1:][sm::cs] = -1
         self.raw_data[-1] = int(em)
-        
+
 
 
 read_out = ReadOut()

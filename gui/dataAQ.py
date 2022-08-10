@@ -15,16 +15,16 @@ class Main:
         self.is_running = False
 
         self.tof_fig_size = [6, 5]
-        self.tof_dpi = 120
+        self.tof_dpi = 90 #120
 
         self.s_fig_size = [4, 2]
-        self.s_dpi = 120
+        self.s_dpi = 80 #120
 
         self.h_fig_size = [4, 2]
-        self.h_dpi = 120
+        self.h_dpi = 80 #120
 
         self.y_scale = 'linear' # log
-        self.xlim = (0.0, 1000.0)
+        self.xlim = (0.0, 150.0)
         self.ylim = (1e-8, 1.0)
 
     def init_obj(self):

@@ -18,7 +18,7 @@ class ToF(Display, Threading):
         for tdc in self.tdcs_obj_list:
             line, = self.ax.plot(tdc.time_arr, tdc.arr, label=tdc.name) # time, arr : for each module
             self.lines.append(line)
-        
+
         # init prev lines
         self.prev_lines = []
         for tdc in self.tdcs_obj_list:
@@ -44,10 +44,10 @@ class ToF(Display, Threading):
 
 
     def _run(self):
-        # Read TDC arr and update line plot  
+        # Read TDC arr and update line plot
         self.update()
         # Update plot scale
-        
+
         # render to the st app
         #self.st_plot()
         sleep(self.delay)
@@ -86,10 +86,10 @@ class Mtof_stream(Display, Threading):
         self.ax.set_xlabel("Laser Shot (Updating ..)")
         self.ax.set_ylabel("TDC Count")
 
-        self.ax.set_ylim(-10, 4100)
+        self.ax.set_ylim(-100, 4500)
 
     def update(self,):
-        # Read TDC arr and update line plot  
+        # Read TDC arr and update line plot
         for i, tdc in enumerate(self.tdcs_obj_list):
             for j, line in enumerate(self.lines[i]):
                 line.set_ydata(tdc.channel_arr[:tdc.channel_window_size, j])
@@ -106,7 +106,7 @@ class Mtof_stream(Display, Threading):
 ## Monitor TOF (avg Hit/shot)
 class Mtof_hits(Display, Threading):
 
-    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=90, delay=1, fixed_hit_arr_size=100):        
+    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=90, delay=1, fixed_hit_arr_size=100):
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
         self.fixed_hit_arr_size = fixed_hit_arr_size
@@ -114,7 +114,7 @@ class Mtof_hits(Display, Threading):
         self.init_fig(figsize=figsize, dpi=dpi)
 
         self.init_fixed_hit_arr()
-        
+
         # init lines
         self.lines = []
         for tdc in self.tdcs_obj_list:
@@ -134,17 +134,17 @@ class Mtof_hits(Display, Threading):
         self.index = 0
         for tdc in self.tdcs_obj_list:
             tdc.fixed_hit_arr = np.zeros(self.fixed_hit_arr_size, dtype=np.int16)
-    
+
 
     def update(self,):
-        # Read TDC arr and update line plot  
+        # Read TDC arr and update line plot
         for i, tdc in enumerate(self.tdcs_obj_list):
             tdc.fixed_hit_arr[self.index] = tdc.avg_hit_list[-1]
-            self.lines[i].set_ydata(tdc.fixed_hit_arr)      
+            self.lines[i].set_ydata(tdc.fixed_hit_arr)
         # Update plot scale
         self.index += 1
         if self.index == self.fixed_hit_arr_size:
-            self.index = 0 
+            self.index = 0
 
     def _run(self):
         self.update()

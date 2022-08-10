@@ -4,7 +4,7 @@ auto_save_delay = 10       # n of loops to skip when auto saving
 # CC-USB Settings
 cc_time_out_ms = 100
 LAM = 0
-trig_delay_us = 100
+trig_delay_us = 500
 buffer_opt = 0                      # Buffer option (0 for largest buffer size: 4K ) - see CC_USB Manual
 marker = True
 marker_size = 2                     # Tow nubers before and after channels data [9, ... data from TDC ... , -1]
@@ -16,12 +16,12 @@ target_modules = [TDC2228A]
 
 # TDC Settings
 ## TDC2228A Settings
-TDC2228A_slot_number = 19
+TDC2228A_slot_number = 20
 TDC2228A_input_channel_number = 0
 TDC2228A_nodch = 8                 # number_of_data_channels
-TDC2228A_time_resolution = 0.050   # ns
-TDC2228A_time_slop = 0.0474
-TDC2228A_time_offset = 5.12
+TDC2228A_time_resolution = 0.1518   # ns
+TDC2228A_time_slop = 0
+TDC2228A_time_offset = 8.56
 TDC2228A_min_count_value = 0
 TDC2228A_max_count_value = 2048
 

@@ -2,8 +2,8 @@ from settings.settings import settings
 import numpy as np
 
 def raw_data_to_channel_arr(
-        data:list, channel_size=settings.get_setting("tot_nodch"), 
-        marker_size=settings.get_setting("marker_size"), 
+        data:list, channel_size=settings.get_setting("tot_nodch"),
+        marker_size=settings.get_setting("marker_size"),
         smarker=settings.get_setting("start_marker"),
         emarker=settings.get_setting("end_marker")):
     number_of_data_chunck = data[0] # = number of laser shot
@@ -15,9 +15,9 @@ def raw_data_to_channel_arr(
     return data_ar[:,1:-1]
 
 
-def channel_arr_to_count_ar(channel_arr, min_count_value=0, max_count_value=2048): #* max_count is variable => should be in the settings
+def channel_arr_to_count_ar(channel_arr, min_count_value=1, max_count_value=2048): #* max_count is variable => should be in the settings
     data_ar = channel_arr.flatten()
-    cond = (data_ar>=min_count_value) & (data_ar<max_count_value)   # [min, ..., max)  
+    cond = (data_ar>=min_count_value) & (data_ar<max_count_value)   # [min, ..., max)
     data_ar = data_ar[cond]
     return _count_to_bins(data_ar, size=max_count_value - min_count_value), data_ar.size
 
