@@ -16,7 +16,7 @@ def main_page():
     with fc1:
         tof_hand = st.pyplot(main.tof.fig)
     with fc2:
-        s_hand = st.pyplot(main.mtof_stream.fig)
+       # s_hand = st.pyplot(main.mtof_stream.fig)
         h_hand = st.pyplot(main.mtof_hit.fig)
     # Tot avg hit
     avg_hits = fc2.empty()
@@ -37,8 +37,8 @@ def main_page():
     main.adj_y_scale(yscale)
 
     # x and y lim
-    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=1000.0, value=(0.0,100.0), step=0.5)
-    y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-9,0), step=1)
+    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=30000.0, value=(0.0,10000.0), step=0.5)
+    y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-4,0), step=1)
     main.adj_xlim(x_lim)
     y_lim=list(y_lim)
     y_lim[0] = 10**(y_lim[0])
@@ -117,7 +117,7 @@ def main_page():
     # Update outputs:
     while main.is_running:
         tof_hand.pyplot(main.tof.fig)
-        s_hand.pyplot(main.mtof_stream.fig)
+        #s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
 
         txt = ""
@@ -128,5 +128,5 @@ def main_page():
         sleep(update_delay)
 
     tof_hand.pyplot(main.tof.fig)
-    s_hand.pyplot(main.mtof_stream.fig)
+    #s_hand.pyplot(main.mtof_stream.fig)
     h_hand.pyplot(main.mtof_hit.fig)
