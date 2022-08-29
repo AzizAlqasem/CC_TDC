@@ -116,7 +116,7 @@ def main_page():
 
     # Update outputs:
     while main.is_running:
-        #tof_hand.pyplot(main.tof.fig)
+        tof_hand.pyplot(main.tof.fig)
         #s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
 
