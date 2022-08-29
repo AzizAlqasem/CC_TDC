@@ -16,7 +16,7 @@ class ToF(Display, Threading):
         # init lines
         self.lines = []
         for tdc in self.tdcs_obj_list:
-            line, = self.ax.plot(tdc.time_arr, tdc.arr, label=tdc.name) # time, arr : for each module
+            line, = self.ax.plot(tdc.time_arr[::10], tdc.arr[::10], label=tdc.name) # time, arr : for each module
             self.lines.append(line)
 
         # init prev lines

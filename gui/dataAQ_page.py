@@ -46,7 +46,7 @@ def main_page():
     main.adj_ylim(y_lim)
 
     # Max laser shot
-    max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 5000)
+    # max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 5000)
 
     # Update rate (delay) (max = 1 sec)
     update_delay = sc5.number_input("Update delay (sec)", value=1)
@@ -57,7 +57,7 @@ def main_page():
         main.tof.show_prev_arr(False)
 
     # Power:
-    power_ang = sc6.slider("Motor Controller (Angle)", min_value=0, max_value=360, value=0, step=1)
+    # power_ang = sc6.slider("Motor Controller (Angle)", min_value=0, max_value=360, value=0, step=1)
 
     # Side bar: Controls and status
     st.sidebar.write("### CC-TDC")
@@ -116,7 +116,7 @@ def main_page():
 
     # Update outputs:
     while main.is_running:
-        tof_hand.pyplot(main.tof.fig)
+        #tof_hand.pyplot(main.tof.fig)
         #s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
 
@@ -130,3 +130,8 @@ def main_page():
     tof_hand.pyplot(main.tof.fig)
     #s_hand.pyplot(main.mtof_stream.fig)
     h_hand.pyplot(main.mtof_hit.fig)
+
+
+
+# main.tof.fig.clf()
+# Streamlit, version 0.84.1

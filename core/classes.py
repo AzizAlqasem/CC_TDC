@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('agg')
 import numpy as np
 from threading import Thread
 from settings.settings import settings
@@ -19,7 +21,7 @@ class Threading:
         self.terminate = False # Terminate running Thread
 
         #Check the status of run loop
-        self.is_running = False 
+        self.is_running = False
 
     def run(self,):
         self.is_running = True
@@ -38,7 +40,7 @@ class Threading:
                 ct.start_thread()
 
     def terminate_thread(self,chiled_threads:list=None):
-        self.terminate = True 
+        self.terminate = True
         if chiled_threads: #list of objects contains self.terminate
             for ct in chiled_threads:
                 ct.terminate_thread()
@@ -57,16 +59,16 @@ class DAQ:
         self.bins_to_time()
 
     def init(self,):
-        self.avg_hit_list = [0]  #0 is to init and will be omitted 
+        self.avg_hit_list = [0]  #0 is to init and will be omitted
         self.set_arr()
         self.set_channel_arr()
-    
+
     def set_arr(self): #Also Clear
         self.arr = np.zeros(self.size, dtype=self.type)
 
     def init_prev_arr(self,): # Also Clear
         self.prev_arr = self.arr.copy()
-    
+
     def set_channel_arr(self,):
         tot_channel_size=settings.get_setting("tot_nodch")
         self.channel_window_size = 4000 // (tot_channel_size + 2) # #*Potential bugus when the stream has smaller size
@@ -91,7 +93,7 @@ class DAQ:
     def auto_save(self):
         with open(self.name+"_temp.csv", 'w') as f:
             np.savetxt(f, self.arr)
-          
+
     def save(self, file_path, info:dict):
         self._gen_header(info)
         file_path = file_path[:-4] + "_" + self.name + ".csv"

@@ -1,5 +1,5 @@
 from core.daq_custom_classes import DCounter
-from core.display_custom_classes import ToF, Mtof_stream, Mtof_hits
+from core.display_custom_classes import ToF, Mtof_hits
 from interface.read_out import read_out
 from settings.settings import settings
 
