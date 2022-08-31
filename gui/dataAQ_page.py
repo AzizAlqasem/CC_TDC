@@ -12,7 +12,7 @@ main = Main()
 
 def main_page():
     # First Row: Figures
-    fc1, fc2 = st.columns([5,3])
+    fc1, fc2 = st.columns([5,1])
     with fc1:
         tof_hand = st.pyplot(main.tof.fig)
     with fc2:
@@ -37,7 +37,7 @@ def main_page():
     main.adj_y_scale(yscale)
 
     # x and y lim
-    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=30000.0, value=(0.0,10000.0), step=0.5)
+    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=2000.0, value=(0.0,2000.0), step=0.5)
     y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-4,0), step=1)
     main.adj_xlim(x_lim)
     y_lim=list(y_lim)
@@ -116,7 +116,7 @@ def main_page():
 
     # Update outputs:
     while main.is_running:
-        tof_hand.pyplot(main.tof.fig)
+        #tof_hand.pyplot(main.tof.fig)
         #s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
 

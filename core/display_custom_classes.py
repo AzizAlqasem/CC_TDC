@@ -16,7 +16,7 @@ class ToF(Display, Threading):
         # init lines
         self.lines = []
         for tdc in self.tdcs_obj_list:
-            line, = self.ax.plot(tdc.time_arr[::10], tdc.arr[::10], label=tdc.name) # time, arr : for each module
+            line, = self.ax.plot(tdc.time_arr, tdc.arr, label=tdc.name) # time, arr : for each module
             self.lines.append(line)
 
         # init prev lines
@@ -66,7 +66,7 @@ class ToF(Display, Threading):
 ## Monitor TOF
 class Mtof_stream(Display, Threading):
 
-    def __init__(self, tdcs_obj_list, figsize=[4, 2], dpi=80, delay=1):
+    def __init__(self, tdcs_obj_list, figsize=[4, 2], dpi=90, delay=1):
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay
         # Init Figure from Display class:
@@ -106,7 +106,7 @@ class Mtof_stream(Display, Threading):
 ## Monitor TOF (avg Hit/shot)
 class Mtof_hits(Display, Threading):
 
-    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=60, delay=1, fixed_hit_arr_size=100):
+    def __init__(self,tdcs_obj_list,figsize=[4,2], dpi=90, delay=1, fixed_hit_arr_size=100):
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
         self.fixed_hit_arr_size = fixed_hit_arr_size

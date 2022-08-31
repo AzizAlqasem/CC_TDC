@@ -14,14 +14,14 @@ class Main:
         self.is_tdc_connected = False
         self.is_running = False
 
-        self.tof_fig_size = [6, 5]
-        self.tof_dpi = 90 #120
+        self.tof_fig_size = [14, 8]
+        self.tof_dpi = 140
 
         self.s_fig_size = [4, 2]
         self.s_dpi = 80 #120
 
         self.h_fig_size = [4, 2]
-        self.h_dpi = 80 #120
+        self.h_dpi = 40 #120
 
         self.y_scale = 'linear' # log
         self.xlim = (0.0, 150.0)
