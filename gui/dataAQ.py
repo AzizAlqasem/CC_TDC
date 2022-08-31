@@ -1,5 +1,5 @@
 from core.daq_custom_classes import DCounter
-from core.display_custom_classes import ToF, Mtof_stream, Mtof_hits
+from core.display_custom_classes import ToF, Mtof_hits
 from interface.read_out import read_out
 from settings.settings import settings
 
@@ -14,14 +14,14 @@ class Main:
         self.is_tdc_connected = False
         self.is_running = False
 
-        self.tof_fig_size = [6, 5]
-        self.tof_dpi = 90 #120
+        self.tof_fig_size = [14, 8]
+        self.tof_dpi = 140
 
         self.s_fig_size = [4, 2]
         self.s_dpi = 80 #120
 
         self.h_fig_size = [4, 2]
-        self.h_dpi = 80 #120
+        self.h_dpi = 40 #120
 
         self.y_scale = 'linear' # log
         self.xlim = (0.0, 150.0)
@@ -35,8 +35,8 @@ class Main:
         self.tof = ToF(self.dcounter.tdcs_obj_list,
                     figsize=self.tof_fig_size, dpi=self.tof_dpi)
 
-        self.mtof_stream = Mtof_stream(self.dcounter.tdcs_obj_list,
-                    figsize=self.s_fig_size, dpi=self.s_dpi)
+        # self.mtof_stream = Mtof_stream(self.dcounter.tdcs_obj_list,
+        #             figsize=self.s_fig_size, dpi=self.s_dpi)
 
         self.mtof_hit = Mtof_hits(self.dcounter.tdcs_obj_list,
                     figsize=self.h_fig_size, dpi=self.h_dpi)
@@ -51,7 +51,7 @@ class Main:
     def add_handler(self, tof_hand, s_hand, h_hand):
         # A figure handler must be added
         self.tof.add_handler(tof_hand)
-        self.mtof_stream.add_handler(s_hand)
+        # self.mtof_stream.add_handler(s_hand)
         self.mtof_hit.add_handler(h_hand)
 
 
@@ -61,7 +61,7 @@ class Main:
         # Main thread
         if self.is_running == False:
             self.dcounter.start_thread(
-                chiled_threads=[self.tof, self.mtof_stream, self.mtof_hit]
+                chiled_threads=[self.tof, self.mtof_hit]#[self.tof, self.mtof_stream, self.mtof_hit]
                 )
             # ^ now all display threads will start once dcounter start
             self.is_running = True
@@ -70,7 +70,7 @@ class Main:
 
     def stop(self):
         self.dcounter.terminate_thread(
-            chiled_threads=[self.tof, self.mtof_stream, self.mtof_hit]
+            chiled_threads=[self.tof, self.mtof_hit]#[self.tof, self.mtof_stream, self.mtof_hit]
             )
         self.is_running = False
         print("stop")
@@ -79,7 +79,7 @@ class Main:
     def clear(self):
         self.dcounter.clear()
         self.mtof_hit.init_fixed_hit_arr()
-        for d in [self.tof, self.mtof_stream, self.mtof_hit]:
+        for d in [self.tof, self.mtof_hit]:#[self.tof, self.mtof_stream, self.mtof_hit]:
             d.update()
             #d.st_plot()
 

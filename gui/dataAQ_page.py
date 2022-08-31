@@ -12,11 +12,11 @@ main = Main()
 
 def main_page():
     # First Row: Figures
-    fc1, fc2 = st.columns([5,3])
+    fc1, fc2 = st.columns([5,1])
     with fc1:
         tof_hand = st.pyplot(main.tof.fig)
     with fc2:
-        s_hand = st.pyplot(main.mtof_stream.fig)
+       # s_hand = st.pyplot(main.mtof_stream.fig)
         h_hand = st.pyplot(main.mtof_hit.fig)
     # Tot avg hit
     avg_hits = fc2.empty()
@@ -37,8 +37,8 @@ def main_page():
     main.adj_y_scale(yscale)
 
     # x and y lim
-    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=1000.0, value=(0.0,100.0), step=0.5)
-    y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-9,0), step=1)
+    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=2000.0, value=(0.0,2000.0), step=0.5)
+    y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-4,0), step=1)
     main.adj_xlim(x_lim)
     y_lim=list(y_lim)
     y_lim[0] = 10**(y_lim[0])
@@ -46,7 +46,7 @@ def main_page():
     main.adj_ylim(y_lim)
 
     # Max laser shot
-    max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 5000)
+    # max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 5000)
 
     # Update rate (delay) (max = 1 sec)
     update_delay = sc5.number_input("Update delay (sec)", value=1)
@@ -57,7 +57,7 @@ def main_page():
         main.tof.show_prev_arr(False)
 
     # Power:
-    power_ang = sc6.slider("Motor Controller (Angle)", min_value=0, max_value=360, value=0, step=1)
+    # power_ang = sc6.slider("Motor Controller (Angle)", min_value=0, max_value=360, value=0, step=1)
 
     # Side bar: Controls and status
     st.sidebar.write("### CC-TDC")
@@ -116,8 +116,8 @@ def main_page():
 
     # Update outputs:
     while main.is_running:
-        tof_hand.pyplot(main.tof.fig)
-        s_hand.pyplot(main.mtof_stream.fig)
+        #tof_hand.pyplot(main.tof.fig)
+        #s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
 
         txt = ""
@@ -128,5 +128,10 @@ def main_page():
         sleep(update_delay)
 
     tof_hand.pyplot(main.tof.fig)
-    s_hand.pyplot(main.mtof_stream.fig)
+    #s_hand.pyplot(main.mtof_stream.fig)
     h_hand.pyplot(main.mtof_hit.fig)
+
+
+
+# main.tof.fig.clf()
+# Streamlit, version 0.84.1
