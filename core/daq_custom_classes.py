@@ -6,7 +6,7 @@ from time import sleep
 import numpy as np
 
 
-class DCounter(Threading): 
+class DCounter(Threading):
     def __init__(self):
         self.init()
 
@@ -25,7 +25,7 @@ class DCounter(Threading):
         for tdc in self.tdcs_obj_list:
             #tdc.set_arr()
             tdc.init() # NOT self.init()
-        
+
         self.tot_laser_shot = 0
         self.loop_counter = 0
 
@@ -35,24 +35,24 @@ class DCounter(Threading):
             avg = tdc.get_tot_avg_hit(last=last)
             tot_avg_hit_list.append([tdc.name, avg])
         return tot_avg_hit_list
-            
+
     def _run(self,):
         # get data fron TDC
         data = read_out.get_data()
-        if data:   
+        if data:
             channel_data_dict, number_of_data_chunck = data
             # update
             for tdc in self.tdcs_obj_list:
                 ch_arr, data_arr, avg_hit = channel_data_dict[tdc.name]
                 tdc.arr += data_arr
-                tdc.channel_arr = ch_arr 
+                # tdc.channel_arr = ch_arr
                 tdc.avg_hit_list.append(avg_hit)
             self.tot_laser_shot += number_of_data_chunck
-            
+
             if self.loop_counter % self.auto_save_delay == 0:
                 for tdc in self.tdcs_obj_list:
                     tdc.auto_save()
-            
+
             self.loop_counter += 1
             #print("R DAQ")
             sleep(0.5)
