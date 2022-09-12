@@ -38,7 +38,7 @@ class ReadOut:
 
     def get_raw_data(self,):
         self.raw_data = self.cc_usb.bulk_read()
-        if not self.raw_data:
+        if not self.raw_data or self.raw_data[0] == 0:
             self.raw_data = None
         #print(self.raw_data)
 

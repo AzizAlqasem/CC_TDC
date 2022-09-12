@@ -8,6 +8,7 @@ def raw_data_to_channel_arr(
         smarker=settings.get_setting("start_marker"),
         emarker=settings.get_setting("end_marker")):
     number_of_data_chunck = data[0] # = number of laser shot
+    # print(number_of_data_chunck, len(data)) #= 227, 4088
     assert data[-1] == emarker, f"{data}"
     data_ar = np.array(data[1:-1], dtype=np.int32).reshape(number_of_data_chunck,
                          channel_size + marker_size)

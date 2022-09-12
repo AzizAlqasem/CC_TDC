@@ -12,7 +12,7 @@ main = Main()
 
 def main_page():
     # First Row: Figures
-    fc1, fc2 = st.columns([5,1])
+    fc1, fc2 = st.columns([4,1])
     with fc1:
         tof_hand = st.pyplot(main.tof.fig)
     with fc2:

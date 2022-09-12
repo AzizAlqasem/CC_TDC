@@ -6,7 +6,7 @@ import numpy as np
 ## Time Of Flight custom Class
 class ToF(Display, Threading):
 
-    def __init__(self, tdcs_obj_list, figsize=[4,3], dpi=90, delay=3):
+    def __init__(self, tdcs_obj_list, figsize=[4,3], dpi=90, delay=2):
         self.auto_scale = True
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay  # sec
