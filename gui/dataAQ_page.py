@@ -46,7 +46,7 @@ def main_page():
     main.adj_ylim(y_lim)
 
     # Max laser shot
-    # max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 5000)
+    max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 1000)
 
     # Update rate (delay) (max = 1 sec)
     update_delay = sc5.number_input("Update delay (sec)", value=1)
@@ -116,7 +116,12 @@ def main_page():
 
     # Update outputs:
     while main.is_running:
-        #tof_hand.pyplot(main.tof.fig)
+        tot_laser_shot = main.dcounter.tot_laser_shot
+        if tot_laser_shot >= max_laser_shot*1000:
+            print(tot_laser_shot, max_laser_shot*1000)
+            main.stop()
+
+        tof_hand.pyplot(main.tof.fig)
         #s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
 
@@ -124,7 +129,8 @@ def main_page():
         for name, avh in main.dcounter.get_tot_avg_hit(last=10):
             txt += f"{name}: Average hit/shot  =  {round(avh,3)}\n"
         avg_hits.write(txt)
-        laser_shots.write(f"Total Laser shots  =  {main.dcounter.tot_laser_shot}\n")
+        laser_shots.write(f"Total Laser shots  =  {tot_laser_shot}\n")
+
         sleep(update_delay)
 
     tof_hand.pyplot(main.tof.fig)
