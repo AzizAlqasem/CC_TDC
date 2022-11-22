@@ -16,7 +16,7 @@ def main_page():
     with fc1:
         tof_hand = st.pyplot(main.tof.fig)
     with fc2:
-       # s_hand = st.pyplot(main.mtof_stream.fig)
+        s_hand = st.pyplot(main.mtof_stream.fig)
         h_hand = st.pyplot(main.mtof_hit.fig)
     # Tot avg hit
     avg_hits = fc2.empty()
@@ -122,7 +122,7 @@ def main_page():
             main.stop()
 
         tof_hand.pyplot(main.tof.fig)
-        #s_hand.pyplot(main.mtof_stream.fig)
+        s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
 
         txt = ""
@@ -134,7 +134,7 @@ def main_page():
         sleep(update_delay)
 
     tof_hand.pyplot(main.tof.fig)
-    #s_hand.pyplot(main.mtof_stream.fig)
+    s_hand.pyplot(main.mtof_stream.fig)
     h_hand.pyplot(main.mtof_hit.fig)
 
 

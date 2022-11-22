@@ -1,6 +1,7 @@
 from core.classes import DAQ, Threading
 from settings.settings import settings
 from interface.read_out import read_out
+from interface.data_tools import get_time_distence_between_peaks
 from settings.settings import settings
 from time import sleep
 import numpy as np
@@ -45,7 +46,11 @@ class DCounter(Threading):
             for tdc in self.tdcs_obj_list:
                 ch_arr, data_arr, avg_hit = channel_data_dict[tdc.name]
                 tdc.arr += data_arr
-                tdc.channel_arr = ch_arr
+
+                # tdc.channel_diff1_arr passed as a reference and updated by:
+                tdc.channel_diff1_arr = get_time_distence_between_peaks(tdc.channel_diff1_arr, ch_arr[:,0], ch_arr[:,1])
+                # tdc.channel_arr = ch_arr
+
                 tdc.avg_hit_list.append(avg_hit)
             self.tot_laser_shot += number_of_data_chunck
 

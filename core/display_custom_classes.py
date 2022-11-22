@@ -75,24 +75,31 @@ class Mtof_stream(Display, Threading):
         # init lines
         self.lines = []
         for tdc in self.tdcs_obj_list:
-            sublines = []
-            for arr in tdc.channel_arr.T:
-                line, = self.ax.plot(arr) #list of lines
-                sublines.append(line)
-            self.lines.append(sublines)
+            line, = self.ax.plot(tdc.time_arr, tdc.channel_diff1_arr, label=tdc.name)
+            self.lines.append(line)
+
+
+        # self.lines = []
+        # for tdc in self.tdcs_obj_list:
+        #     sublines = []
+        #     for arr in tdc.channel_arr.T:
+        #         line, = self.ax.plot(arr) #list of lines
+        #         sublines.append(line)
+        #     self.lines.append(sublines)
 
         # Fig info:
-        self.ax.set_title("Channels Data")
-        self.ax.set_xlabel("Laser Shot (Updating ..)")
-        self.ax.set_ylabel("TDC Count")
+        self.ax.set_title("Time between first two hits for each laser shot") #("Channels Data")
+        self.ax.set_xlabel("Time (ns)")
+        self.ax.set_ylabel("Count")
 
-        self.ax.set_ylim(-100, 4500)
+        self.ax.set_ylim(-10, 100)
 
     def update(self,):
         # Read TDC arr and update line plot
         for i, tdc in enumerate(self.tdcs_obj_list):
-            for j, line in enumerate(self.lines[i]):
-                line.set_ydata(tdc.channel_arr[:tdc.channel_window_size, j])
+            self.lines[i].set_ydata(tdc.channel_diff1_arr)
+            # for j, line in enumerate(self.lines[i]):
+            #     line.set_ydata(tdc.channel_arr[:tdc.channel_window_size, j])
 
     def _run(self):
         self.update()

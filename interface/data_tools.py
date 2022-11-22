@@ -34,4 +34,40 @@ def _count_to_bins(data_ar, size):
     for bin in data_ar:  #i in range(len(data_ar)):
         # bin = data_ar[i]#data_ar[i]
         count_ar[bin-1] += 1
+        #* Potential bug*
+        # The 1 in bin-1 is because the min_count_value is 1 and not 0
+        # But that not always the case, so we need to check if the min_count_value is 1
     return count_ar
+
+
+
+# mesure the time distence between to peaks (within the same laser shot)
+@numba.jit(nopython=True)
+def get_time_distence_between_peaks(diff_arr, char1, char2, min_count_value=1, max_count_value=2048):
+    for i in range(char1.shape[0]):
+        ch1 = char1[i]
+        ch2 = char2[i]
+        if ch1 >= min_count_value and ch1 < max_count_value and ch2 >= min_count_value and ch2 < max_count_value:
+            diff_arr[ch2-ch1] += 1
+    return diff_arr
+
+
+
+# @numba.jit(nopython=True)
+# def get_time_distence_between_peaks(channel_arr, min_count_value=1, max_count_value=2048):
+#     size = max_count_value - min_count_value
+#     diff_1_arr = np.zeros(size, dtype=np.int32)
+#     # diff_2_arr = np.zeros(size, dtype=np.int32)
+#     for i in range(channel_arr.shape[0]):
+#         ch1 = channel_arr[i,0]
+#         ch2 = channel_arr[i,1]
+#         # ch3 = channel_arr[i,2]
+#         if ch1 >= min_count_value and ch1 < max_count_value and ch2 >= min_count_value and ch2 < max_count_value:
+#             diff1 = ch2 - ch1
+#             diff_1_arr[diff1] += 1
+#             # if ch3 >= min_count_value and ch3 < max_count_value:
+#             #     diff2 = ch3 - ch2
+#             #     diff_2_arr[diff2] += 1
+#     return diff_1_arr  #, diff_2_arr
+
+

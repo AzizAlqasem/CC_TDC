@@ -70,10 +70,12 @@ class DAQ:
         self.prev_arr = self.arr.copy()
 
     def set_channel_arr(self,):
-        tot_channel_size=settings.get_setting("tot_nodch")
-        self.channel_window_size = 4000 // (tot_channel_size + 2) # #*Potential bugus when the stream has smaller size
-        channel_size=settings.get_setting("nodch", target=self.name)
-        self.channel_arr = np.zeros([self.channel_window_size, channel_size], dtype=np.int32)
+        self.channel_diff1_arr = np.zeros(self.size, dtype=self.type)
+
+        # tot_channel_size=settings.get_setting("tot_nodch")
+        # self.channel_window_size = 4000 // (tot_channel_size + 2) # #*Potential bugus when the stream has smaller size
+        # channel_size=settings.get_setting("nodch", target=self.name)
+        # self.channel_arr = np.zeros([self.channel_window_size, channel_size], dtype=np.int32)
 
     def bins_to_time(self):
         self.channel = settings.get_setting("input_channel_number", target = self.name)
@@ -101,6 +103,10 @@ class DAQ:
             np.savetxt(fh, np.array([self.time_arr,self.arr]).T, delimiter=',', header=self.header)
         # store the data_count_ar
         self.prev_arr = self.arr.copy() #Previous data arr
+
+        # Save the time difference between two consecutive hits
+        with open(file_path[:-4] + "_diff.csv", 'w') as fh:
+            np.savetxt(fh, np.array([self.time_arr,self.channel_diff1_arr]).T, delimiter=',', header="Time difference between two consecutive hits")
 
     def _gen_header(self, info:dict):
         self.header = "Time: " + str(datetime.datetime.today()) + '\n'
