@@ -66,7 +66,7 @@ class ToF(Display, Threading):
 ## Monitor TOF
 class Mtof_stream(Display, Threading):
 
-    def __init__(self, tdcs_obj_list, figsize=[4, 2], dpi=90, delay=1):
+    def __init__(self, tdcs_obj_list, figsize=[6, 4], dpi=90, delay=1):
         self.tdcs_obj_list = tdcs_obj_list
         self.delay = delay
         # Init Figure from Display class:
@@ -90,14 +90,17 @@ class Mtof_stream(Display, Threading):
         # Fig info:
         self.ax.set_title("Time between first two hits for each laser shot") #("Channels Data")
         self.ax.set_xlabel("Time (ns)")
-        self.ax.set_ylabel("Count")
+        self.ax.set_ylabel("Relative Count %")
 
-        self.ax.set_ylim(-10, 100)
+        self.ax.set_ylim(0, 5)
+        self.ax.set_xlim(0, 100)
 
     def update(self,):
         # Read TDC arr and update line plot
         for i, tdc in enumerate(self.tdcs_obj_list):
-            self.lines[i].set_ydata(tdc.channel_diff1_arr)
+            # self.lines[i].set_ydata(tdc.channel_diff1_arr)
+            self.lines[i].set_ydata(tdc.channel_diff1_arr * 100 / tdc.tot_electrons)
+
             # for j, line in enumerate(self.lines[i]):
             #     line.set_ydata(tdc.channel_arr[:tdc.channel_window_size, j])
 

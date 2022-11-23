@@ -62,6 +62,7 @@ class DAQ:
         self.avg_hit_list = [0]  #0 is to init and will be omitted
         self.set_arr()
         self.set_channel_arr()
+        self.tot_electrons = 0
 
     def set_arr(self): #Also Clear
         self.arr = np.zeros(self.size, dtype=self.type)

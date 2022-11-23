@@ -42,6 +42,7 @@ class DCounter(Threading):
         data = read_out.get_data()
         if data:
             channel_data_dict, number_of_data_chunck = data
+            self.tot_laser_shot += number_of_data_chunck
             # update
             for tdc in self.tdcs_obj_list:
                 ch_arr, data_arr, avg_hit = channel_data_dict[tdc.name]
@@ -49,10 +50,10 @@ class DCounter(Threading):
 
                 # tdc.channel_diff1_arr passed as a reference and updated by:
                 tdc.channel_diff1_arr = get_time_distence_between_peaks(tdc.channel_diff1_arr, ch_arr[:,0], ch_arr[:,1])
+                tdc.tot_electrons = self.tot_laser_shot * tdc.get_tot_avg_hit()
                 # tdc.channel_arr = ch_arr
 
                 tdc.avg_hit_list.append(avg_hit)
-            self.tot_laser_shot += number_of_data_chunck
 
             if self.loop_counter % self.auto_save_delay == 0:
                 for tdc in self.tdcs_obj_list:
