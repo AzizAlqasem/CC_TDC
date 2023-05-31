@@ -42,7 +42,7 @@ def main_page():
     main.adj_y_scale(yscale)
 
     # x and y lim
-    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=500.0, value=(0.0,500.0), step=0.5)
+    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=2000.0, value=(0.0,500.0), step=0.5)
     y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-4,0), step=1)
     main.adj_xlim(x_lim)
     y_lim=list(y_lim)
