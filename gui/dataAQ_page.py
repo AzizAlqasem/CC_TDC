@@ -28,9 +28,10 @@ def main_page():
     avh2 = avh_list[1][1] # TDC2
     avg_hits1.write(f"TDC1: {round(avh1,3)}")
     avg_hits2.write(f"TDC2: {round(avh2,3)}")
+
     # Tot Laser shot
     laser_shots = fc2.empty()
-    laser_shots.write(f"Total Laser shots  =  {main.dcounter.tot_laser_shot}\n")
+    laser_shots.write(f"Total Laser shots:  {main.dcounter.tot_laser_shot}")
 
 
     # Second Row: Fig settings
@@ -41,7 +42,7 @@ def main_page():
     main.adj_y_scale(yscale)
 
     # x and y lim
-    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=2000.0, value=(0.0,2000.0), step=0.5)
+    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=500.0, value=(0.0,500.0), step=0.5)
     y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-4,0), step=1)
     main.adj_xlim(x_lim)
     y_lim=list(y_lim)
@@ -95,9 +96,9 @@ def main_page():
     proj = inpcol1.text_input('Project Name', 'He ATI')
     expr = inpcol2.text_input('Experiment Name', 'High int. 800nm')
     target_n = inpcol3.text_input('Target Name', 'He')
-    pulse_energy = inpcol4.text_input('Pulse Energy', '1mJ')
-    wl = inpcol5.text_input('Wavelength', '800 nm')
-    pressure = inpcol6.text_input("Pressure (torr)", "10^-5")
+    pulse_energy = inpcol4.text_input('Power (mW)', '50')
+    wl = inpcol5.text_input('Wavelength (nm)', '800')
+    pressure = inpcol6.text_input("Pressure (torr)", "1E-7")
     note = st.text_input('Note', 'Things are working great!')
     if sb2.button("Save"):
         try:
@@ -109,9 +110,9 @@ def main_page():
             "Project": proj,
             "Experiment": expr,
             "Target Name": target_n,
-            "Pulse Energy": pulse_energy,
-            "Wavelength": wl,
-            "Pressure": pressure,
+            "Power (mW)": pulse_energy,
+            "Wavelength (nm)": wl,
+            "Pressure (torr)": pressure,
             "Note": note,
             "Columns": "Time (ns), TDC Count"
         }
@@ -128,13 +129,11 @@ def main_page():
         tof_hand.pyplot(main.tof.fig)
         #s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
-
         avh_list = main.dcounter.get_tot_avg_hit(last=10)
         avh1 = avh_list[0][1] # TDC1
         avh2 = avh_list[1][1] # TDC2
         avg_hits1.write(f"TDC1: {round(avh1,3)}")
         avg_hits2.write(f"TDC2: {round(avh2,3)}")
-
         laser_shots.write(f"Total Laser shots  =  {tot_laser_shot}\n")
 
         sleep(update_delay)

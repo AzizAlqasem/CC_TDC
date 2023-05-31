@@ -11,13 +11,16 @@ st.set_page_config(
 )
 
 
-st.write("## Time of Flight Experiment")
+# st.write("## Time of Flight Experiment")
 
+
+# select_pages = st.sidebar.selectbox(
+#     "Pages", ("DataAQ", "Settings", "T-E Conversion", "Help")
+# )
 
 select_pages = st.sidebar.selectbox(
-    "Pages", ("DataAQ", "Settings", "T-E Conversion", "Help")
+    "Pages", ("DataAQ", "Help")
 )
-
 
 if select_pages == "DataAQ":
     dataAQ_page.main_page()

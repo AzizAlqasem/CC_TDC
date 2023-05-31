@@ -32,6 +32,7 @@ class ToF(Display, Threading):
         self.ax.set_ylabel("Yeild (a.u.)")
 
         self.fig.legend()  # also you can do: self.ax.legend()
+        self.fig.tight_layout()
 
         self.ymax = 0
 
@@ -122,13 +123,14 @@ class Mtof_hits(Display, Threading):
             self.lines.append(line)
 
         # Fig info:
-        self.ax.set_title("Average ions hit per laser shot")
+        # self.ax.set_title("Average ions hit per laser shot")
         self.ax.set_ylabel("hit/shot")
         self.ax.set_xlabel("Time (updating ..)")
 
         self.ax.set_ylim(-1, 9)
         self.ax.set_xlim(0, self.fixed_hit_arr_size)
-        self.ax.legend()  # also you can do: self.ax.legend()
+        #self.ax.legend()  # also you can do: self.ax.legend()
+        self.fig.tight_layout()
 
     def init_fixed_hit_arr(self,):
         self.index = 0

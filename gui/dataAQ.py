@@ -17,11 +17,11 @@ class Main:
         self.tof_fig_size = [14, 8]
         self.tof_dpi = 140
 
-        self.s_fig_size = [4, 2]
-        self.s_dpi = 80 #120
+        # self.s_fig_size = [4, 2]
+        # self.s_dpi = 80 #120
 
-        self.h_fig_size = [4, 2]
-        self.h_dpi = 40 #120
+        self.h_fig_size = [4, 3]
+        self.h_dpi = 60 #120
 
         self.y_scale = 'linear' # log
         self.xlim = (0.0, 150.0)
