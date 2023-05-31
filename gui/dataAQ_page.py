@@ -17,13 +17,17 @@ def main_page():
         tof_hand = st.pyplot(main.tof.fig)
     with fc2:
        # s_hand = st.pyplot(main.mtof_stream.fig)
+        # st.text("."+"\n"*+".")
+        st.subheader("Average hit/shot")
         h_hand = st.pyplot(main.mtof_hit.fig)
     # Tot avg hit
-    avg_hits = fc2.empty()
-    txt = ""
-    for name, avh in main.dcounter.get_tot_avg_hit(last=10):
-        txt += f"{name}: Average hit/shot  =  {round(avh,3)}\n"
-    avg_hits.write(txt)
+    avg_hits1 = fc2.empty()
+    avg_hits2 = fc2.empty()
+    avh_list = main.dcounter.get_tot_avg_hit(last=10)
+    avh1 = avh_list[0][1] # TDC1
+    avh2 = avh_list[1][1] # TDC2
+    avg_hits1.write(f"TDC1: {round(avh1,3)}")
+    avg_hits2.write(f"TDC2: {round(avh2,3)}")
     # Tot Laser shot
     laser_shots = fc2.empty()
     laser_shots.write(f"Total Laser shots  =  {main.dcounter.tot_laser_shot}\n")
@@ -125,10 +129,12 @@ def main_page():
         #s_hand.pyplot(main.mtof_stream.fig)
         h_hand.pyplot(main.mtof_hit.fig)
 
-        txt = ""
-        for name, avh in main.dcounter.get_tot_avg_hit(last=10):
-            txt += f"{name}: Average hit/shot  =  {round(avh,3)}\n"
-        avg_hits.write(txt)
+        avh_list = main.dcounter.get_tot_avg_hit(last=10)
+        avh1 = avh_list[0][1] # TDC1
+        avh2 = avh_list[1][1] # TDC2
+        avg_hits1.write(f"TDC1: {round(avh1,3)}")
+        avg_hits2.write(f"TDC2: {round(avh2,3)}")
+
         laser_shots.write(f"Total Laser shots  =  {tot_laser_shot}\n")
 
         sleep(update_delay)
