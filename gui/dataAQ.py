@@ -2,17 +2,21 @@ from core.daq_custom_classes import DCounter
 from core.display_custom_classes import ToF, Mtof_hits
 from interface.read_out import read_out
 from settings.settings import settings
+from pylablib.devices import Thorlabs
+
 
 class Main:
 
     def __init__(self,):
         self.init_var()
         self.init_obj()
+        self.init_motors()
 
     def init_var(self,):
 
         self.is_tdc_connected = False
         self.is_running = False
+        self.is_scanning = False
 
         self.tof_fig_size = [14, 8]
         self.tof_dpi = 140
@@ -26,6 +30,11 @@ class Main:
         self.y_scale = 'linear' # log
         self.xlim = (0.0, 150.0)
         self.ylim = (1e-8, 1.0)
+
+        # Motor constants:
+        self.STEP_SIZE_PER_DEGREE = 600_000/312  #Might be different for different motors
+        self.current_motor_pos = 0.0 # angle
+        self.scan_angles = []
 
     def init_obj(self):
         read_out.init()
@@ -41,6 +50,18 @@ class Main:
         self.mtof_hit = Mtof_hits(self.dcounter.tdcs_obj_list,
                     figsize=self.h_fig_size, dpi=self.h_dpi)
 
+    def init_motors(self,):# Init any moter connected to PC such as the rotation stage of the half wave plate
+        self.devices = Thorlabs.list_kinesis_devices()
+        print("Found devices: ", self.devices)
+        if self.devices:
+            self.motor_sn = self.devices[0][0]
+            self.motor = Thorlabs.KinesisMotor(self.motor_sn)
+            self.motor.home()
+            self.is_motor_connected = True
+            print("Motor successfuly connected: ", self.motor_sn)
+        else:
+            print("No motor found!")
+            self.is_motor_connected = False
 
     def reload(self,): #update settings
         if self.is_tdc_connected == False:

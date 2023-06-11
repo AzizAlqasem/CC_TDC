@@ -36,7 +36,7 @@ def main_page():
 
     # Second Row: Fig settings
     sc0, sc1, _,  sc2 = st.columns([2, 6, 1, 6])
-    sc3, sc4, sc5, sc6 = st.columns([1, 3, 2, 4])
+    sc3, sc4, sc5, sc6 = st.columns([1, 3, 2, 3])
     # y-scale
     yscale = sc0.radio("Y-scale",("log","linear"))
     main.adj_y_scale(yscale)
@@ -51,10 +51,11 @@ def main_page():
     main.adj_ylim(y_lim)
 
     # Max laser shot
-    max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 1000)
+    max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 10000)
 
     # Update rate (delay) (max = 1 sec)
     update_delay = sc5.number_input("Update delay (sec)", value=1)
+
     # Show Prev data
     if sc3.checkbox("P.D."):
         main.tof.show_prev_arr(True)
@@ -77,6 +78,7 @@ def main_page():
 
     if sb1.button("Stop"):
         main.stop()
+        main.is_scanning = False # Also stop scanning
 
     if sb3.button("Clear"):
         main.clear()
@@ -90,6 +92,26 @@ def main_page():
     if sb_2.button("Reload"):
         main.reload()
 
+    st.sidebar.write("### Scan")
+    sbc_0, sbc_1, sbc_2 = st.sidebar.columns([1,1,1])
+    _,sbc_3, sbc_4,_ = st.sidebar.columns([1,2,2,1])
+    # Motor position:
+    motor_pos = sc6.number_input("Motor Position (deg)", value=0.0, step=0.5)
+    if sbc_3.button("Move"):
+        main.current_motor_pos = motor_pos
+        main.motor.move_to(main.current_motor_pos * main.STEP_SIZE_PER_DEGREE) # Convert to step size known by motor
+    scan_start = int(sbc_0.text_input("Start", "0"))
+    scan_end = int(sbc_1.text_input("End", "90"))
+    scan_step = int(sbc_2.text_input("Step", "5"))
+    if sbc_4.button("Scan"):
+        main.is_scanning = True
+        main.run()
+        main.scan_angles = list(range(scan_start, scan_end+1, scan_step))
+        main.current_motor_pos = main.scan_angles.pop(0)
+        main.motor.move_to(main.current_motor_pos * main.STEP_SIZE_PER_DEGREE)
+        sleep(2)
+
+
     # Theird Row: Experiment info
     inpcol1, inpcol2, inpcol3 = st.columns(3)
     inpcol4, inpcol5, inpcol6 = st.columns(3)
@@ -100,22 +122,22 @@ def main_page():
     wl = inpcol5.text_input('Wavelength (nm)', '800')
     pressure = inpcol6.text_input("Pressure (torr)", "1E-7")
     note = st.text_input('Note', 'Things are working great!')
-    if sb2.button("Save"):
-        try:
-            os.makedirs(rf"../Projects/{proj}")
-        except FileExistsError:
-            pass
-        save_file_path = rf"../Projects/{proj}/{expr}.csv"
-        info = {
+    info = {
             "Project": proj,
             "Experiment": expr,
             "Target Name": target_n,
             "Power (mW)": pulse_energy,
             "Wavelength (nm)": wl,
             "Pressure (torr)": pressure,
+            "Angle (deg)": main.current_motor_pos,
             "Note": note,
-            "Columns": "Time (ns), TDC Count"
-        }
+            "Columns": "Time (ns), TDC Count"}
+    if sb2.button("Save"):
+        try:
+            os.makedirs(rf"../Projects/{proj}")
+        except FileExistsError:
+            pass
+        save_file_path = rf"../Projects/{proj}/{expr}.csv"
         main.dcounter.save(save_file_path, info)
 
 
@@ -123,8 +145,31 @@ def main_page():
     while main.is_running:
         tot_laser_shot = main.dcounter.tot_laser_shot
         if tot_laser_shot >= max_laser_shot*1000:
-            print(tot_laser_shot, max_laser_shot*1000)
+            # print(tot_laser_shot, max_laser_shot*1000)
+            print("Max laser shot reached: ", tot_laser_shot, max_laser_shot*1000)
             main.stop()
+            if main.is_scanning:
+                # Save data
+                try:
+                    os.makedirs(rf"../Projects/{proj}")
+                except FileExistsError:
+                    pass
+                save_file_path = rf"../Projects/{proj}/{expr}_{main.current_motor_pos}.csv"
+                main.dcounter.save(save_file_path, info)
+                print("Data saved to: ", save_file_path)
+                # Clear Data
+                main.clear()
+                # Change motor angle, if not at the end
+                if main.scan_angles:
+                    main.current_motor_pos = main.scan_angles.pop(0)
+                    main.motor.move_to(main.current_motor_pos * main.STEP_SIZE_PER_DEGREE) # Convert to step size known by motor
+                    sleep(2) # Wait for motor to move
+                else: # Scan finished
+                    main.is_scanning = False
+                    print("Scan finished!")
+                    break
+                # Run again
+                main.run()
 
         tof_hand.pyplot(main.tof.fig)
         #s_hand.pyplot(main.mtof_stream.fig)
@@ -141,6 +186,9 @@ def main_page():
     tof_hand.pyplot(main.tof.fig)
     #s_hand.pyplot(main.mtof_stream.fig)
     h_hand.pyplot(main.mtof_hit.fig)
+
+
+
 
 
 
