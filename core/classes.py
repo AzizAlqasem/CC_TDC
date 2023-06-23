@@ -98,7 +98,7 @@ class DAQ:
         self._gen_header(info)
         file_path = file_path[:-4] + "_" + self.name + ".csv"
         with open(file_path, 'w') as fh:
-            np.savetxt(fh, np.array([self.time_arr,self.arr]).T, delimiter=',', header=self.header)
+            np.savetxt(fh, np.array([self.time_arr,self.arr]).T, delimiter=',', header=self.header, fmt='%.4f')
         # store the data_count_ar
         self.prev_arr = self.arr.copy() #Previous data arr
 

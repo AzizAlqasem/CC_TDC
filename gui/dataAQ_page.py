@@ -36,7 +36,7 @@ def main_page():
 
     # Second Row: Fig settings
     sc0, sc1, _,  sc2 = st.columns([2, 6, 1, 6])
-    sc3, sc4, sc5, sc6 = st.columns([1, 3, 2, 3])
+    sc3, sc4, sc5, sc6, sc7 = st.columns([1, 2, 2, 2, 2])
     # y-scale
     yscale = sc0.radio("Y-scale",("log","linear"))
     main.adj_y_scale(yscale)
@@ -51,7 +51,7 @@ def main_page():
     main.adj_ylim(y_lim)
 
     # Max laser shot
-    max_laser_shot = sc4.number_input("Max. Laser Shots (K)", value = 10000)
+    max_laser_shot = int(sc4.text_input("Max. Laser Shots (K)", "10000"))
 
     # Update rate (delay) (max = 1 sec)
     update_delay = sc5.number_input("Update delay (sec)", value=1)
@@ -97,9 +97,10 @@ def main_page():
     _,sbc_3, sbc_4,_ = st.sidebar.columns([1,2,2,1])
     # Motor position:
     motor_pos = sc6.number_input("Motor Position (deg)", value=0.0, step=0.5)
+    motor_pos_offset = sc7.number_input("Offset (deg)", value=0.0, step=0.1)
     if sbc_3.button("Move"):
         main.current_motor_pos = motor_pos
-        main.motor.move_to(main.current_motor_pos * main.STEP_SIZE_PER_DEGREE) # Convert to step size known by motor
+        main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE) # Convert to step size known by motor
     scan_start = int(sbc_0.text_input("Start", "0"))
     scan_end = int(sbc_1.text_input("End", "90"))
     scan_step = int(sbc_2.text_input("Step", "5"))
@@ -108,7 +109,7 @@ def main_page():
         main.run()
         main.scan_angles = list(range(scan_start, scan_end+1, scan_step))
         main.current_motor_pos = main.scan_angles.pop(0)
-        main.motor.move_to(main.current_motor_pos * main.STEP_SIZE_PER_DEGREE)
+        main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE)
         sleep(2)
 
 
