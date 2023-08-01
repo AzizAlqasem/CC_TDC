@@ -62,6 +62,11 @@ def main_page():
     else:
         main.tof.show_prev_arr(False)
 
+    if sc3.checkbox("Live"):
+        main.live_plot = True
+    else:
+        main.live_plot = False
+
     # Power:
     # power_ang = sc6.slider("Motor Controller (Angle)", min_value=0, max_value=360, value=0, step=1)
 
@@ -94,7 +99,7 @@ def main_page():
 
     st.sidebar.write("### Scan")
     sbc_0, sbc_1, sbc_2 = st.sidebar.columns([1,1,1])
-    _,sbc_3, sbc_4,_ = st.sidebar.columns([1,2,2,1])
+    _,sbc_3, sbc_4, sbc_5, _ = st.sidebar.columns([1,2,2,2,1])
     # Motor position:
     motor_pos = sc6.number_input("Motor Position (deg)", value=0.0, step=0.5)
     motor_pos_offset = sc7.number_input("Offset (deg)", value=0.0, step=0.1)
@@ -102,15 +107,22 @@ def main_page():
         main.current_motor_pos = motor_pos
         main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE) # Convert to step size known by motor
     scan_start = int(sbc_0.text_input("Start", "0"))
-    scan_end = int(sbc_1.text_input("End", "90"))
-    scan_step = int(sbc_2.text_input("Step", "5"))
+    scan_end = int(sbc_1.text_input("End", "900"))
+    scan_step = int(sbc_2.text_input("Step", "50"))
     if sbc_4.button("Scan"):
         main.is_scanning = True
-        main.run()
         main.scan_angles = list(range(scan_start, scan_end+1, scan_step))
-        main.current_motor_pos = main.scan_angles.pop(0)
+        main.current_motor_pos = main.scan_angles.pop(0)/10
         main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE)
-        sleep(2)
+        sleep(3) # Wait for motor to move
+        main.run()
+
+        # For LIED round scan (Temp)
+        main.round_counter = 1
+
+    if sbc_5.button("Resume"):
+        main.is_scanning = True
+        main.run()
 
 
     # Theird Row: Experiment info
@@ -155,26 +167,51 @@ def main_page():
                     os.makedirs(rf"../Projects/{proj}")
                 except FileExistsError:
                     pass
-                save_file_path = rf"../Projects/{proj}/{expr}_{main.current_motor_pos}.csv"
+                # ---- specific to HWP and LIED
+                # ang_zero = 44.2 # This is the HWP angle that make the polarization angle horizontal
+                # ang = main.current_motor_pos # This is the HWP angle
+                # angle_from_horizontal = ang - ang_zero
+                # pol_ang = 2 * angle_from_horizontal # convert from HWP to Polarization angle
+                # pol_ang_txt = str(int(pol_ang)).zfill(2)
+                # ---- END
+                pol_ang_txt = main.current_motor_pos
+                save_file_path = rf"../Projects/{proj}/{expr}{main.round_counter}_ang{pol_ang_txt}.csv"
+                # update angle in info dict
+                info["Angle (deg)"] = pol_ang_txt
+                info["Experiment"] = f"{expr}{main.round_counter}_ang{pol_ang_txt}"
                 main.dcounter.save(save_file_path, info)
                 print("Data saved to: ", save_file_path)
                 # Clear Data
                 main.clear()
                 # Change motor angle, if not at the end
                 if main.scan_angles:
-                    main.current_motor_pos = main.scan_angles.pop(0)
+                    main.current_motor_pos = main.scan_angles.pop(0)/10
+                    print("Moving to next angle: ", main.current_motor_pos)
+                    print("Remaining angles: ", main.scan_angles)
                     main.motor.move_to(main.current_motor_pos * main.STEP_SIZE_PER_DEGREE) # Convert to step size known by motor
-                    sleep(2) # Wait for motor to move
+                    sleep(3) # Wait for motor to move
                 else: # Scan finished
-                    main.is_scanning = False
-                    print("Scan finished!")
-                    break
+                    ### original
+                    # main.is_scanning = False
+                    # print("Scan finished!")
+                    # break
+                    ### end original
+
+                    ### for LIED round scan (temp)
+                    print("Scan finished for round: ", main.round_counter)
+                    main.round_counter += 1
+                    main.scan_angles = list(range(scan_start, scan_end+1, scan_step))
+                    main.current_motor_pos = main.scan_angles.pop(0)/10
+                    main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE)
+                    sleep(5) # Wait for motor to move
+                    main.clear()
                 # Run again
                 main.run()
 
-        tof_hand.pyplot(main.tof.fig)
-        #s_hand.pyplot(main.mtof_stream.fig)
-        h_hand.pyplot(main.mtof_hit.fig)
+        if main.live_plot:
+            tof_hand.pyplot(main.tof.fig)
+            #s_hand.pyplot(main.mtof_stream.fig)
+            h_hand.pyplot(main.mtof_hit.fig)
         avh_list = main.dcounter.get_tot_avg_hit(last=10)
         avh1 = avh_list[0][1] # TDC1
         avh2 = avh_list[1][1] # TDC2
