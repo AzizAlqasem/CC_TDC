@@ -168,13 +168,13 @@ def main_page():
                 except FileExistsError:
                     pass
                 # ---- specific to HWP and LIED
-                # ang_zero = 44.2 # This is the HWP angle that make the polarization angle horizontal
-                # ang = main.current_motor_pos # This is the HWP angle
-                # angle_from_horizontal = ang - ang_zero
-                # pol_ang = 2 * angle_from_horizontal # convert from HWP to Polarization angle
-                # pol_ang_txt = str(int(pol_ang)).zfill(2)
+                ang_zero = 75 # This is the HWP angle that make the polarization angle horizontal
+                ang = main.current_motor_pos # This is the HWP angle
+                angle_from_horizontal = ang - ang_zero
+                pol_ang = 2 * angle_from_horizontal # convert from HWP to Polarization angle
+                pol_ang_txt = str(int(pol_ang)).zfill(2)
                 # ---- END
-                pol_ang_txt = main.current_motor_pos
+                # pol_ang_txt = main.current_motor_pos
                 save_file_path = rf"../Projects/{proj}/{expr}{main.round_counter}_ang{pol_ang_txt}.csv"
                 # update angle in info dict
                 info["Angle (deg)"] = pol_ang_txt
