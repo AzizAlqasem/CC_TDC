@@ -190,7 +190,7 @@ def main_page():
                     print("Moving to next angle: ", main.current_motor_pos)
                     print("Remaining angles: ", main.scan_angles)
                     main.motor.move_to(main.current_motor_pos * main.STEP_SIZE_PER_DEGREE) # Convert to step size known by motor
-                    sleep(5) # Wait for motor to move
+                    sleep(1) # Wait for motor to move. add to it the time to clear the buffer below
                 else: # Scan finished
                     ### original
                     # main.is_scanning = False
@@ -206,11 +206,12 @@ def main_page():
                     np.random.shuffle(main.scan_angles)
                     main.current_motor_pos = main.scan_angles.pop(0)/10
                     main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE)
-                    sleep(5) # Wait for motor to move
+                    sleep(1) # Wait for motor to move
                 # Run again
                 main.clear()
                 main.run()
-                sleep(1)
+                #* !WARNING! If you change the sleep time below, then consider changing the sleep time for moter to move above
+                sleep(4) # Four seconds since the buffer size is 4K
                 main.clear() # To clear data in the buffer
 
         if main.live_plot:
