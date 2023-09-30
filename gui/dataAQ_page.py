@@ -2,6 +2,7 @@ import streamlit as st
 from gui.dataAQ import Main
 from time import sleep
 import os
+import numpy as np
 
 st.columns = st.beta_columns
 st.sidebar.columns = st.sidebar.beta_columns
@@ -112,11 +113,13 @@ def main_page():
     if sbc_4.button("Scan"):
         main.is_scanning = True
         main.scan_angles = list(range(scan_start, scan_end+1, scan_step))
+        # Randomize angles
+        np.random.shuffle(main.scan_angles)
         main.current_motor_pos = main.scan_angles.pop(0)/10
         main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE)
-        sleep(3) # Wait for motor to move
         main.run()
-
+        sleep(4) # Wait for motor to move
+        main.clear() # Clear buffer from previous scan (angle)
         # For LIED round scan (Temp)
         main.round_counter = 1
 
@@ -181,15 +184,12 @@ def main_page():
                 info["Experiment"] = f"{expr}{main.round_counter}_ang{pol_ang_txt}"
                 main.dcounter.save(save_file_path, info)
                 print("Data saved to: ", save_file_path)
-                # Clear Data
-                main.clear()
                 # Change motor angle, if not at the end
                 if main.scan_angles:
                     main.current_motor_pos = main.scan_angles.pop(0)/10
                     print("Moving to next angle: ", main.current_motor_pos)
                     print("Remaining angles: ", main.scan_angles)
                     main.motor.move_to(main.current_motor_pos * main.STEP_SIZE_PER_DEGREE) # Convert to step size known by motor
-                    sleep(3) # Wait for motor to move
                 else: # Scan finished
                     ### original
                     # main.is_scanning = False
@@ -201,12 +201,14 @@ def main_page():
                     print("Scan finished for round: ", main.round_counter)
                     main.round_counter += 1
                     main.scan_angles = list(range(scan_start, scan_end+1, scan_step))
+                    # Randomize angles
+                    np.random.shuffle(main.scan_angles)
                     main.current_motor_pos = main.scan_angles.pop(0)/10
                     main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE)
-                    sleep(5) # Wait for motor to move
-                    main.clear()
                 # Run again
                 main.run()
+                sleep(4) # Wait for motor to move
+                main.clear() # Clear buffer from previous scan (angle)
 
         if main.live_plot:
             tof_hand.pyplot(main.tof.fig)
