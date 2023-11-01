@@ -67,7 +67,11 @@ class ReadOut:
         if self.raw_data is None:
             return None
         self.get_number_of_data_chunck()
-        self.get_channel_arr()
+        try:
+            self.get_channel_arr() # to catch the error when the size of the raw data array is too small
+        except Exception as e:
+            print(e)
+            return None
         self._split_channel_arr_between_modules()
         return self.channel_data_dict, self.number_of_data_chunck
 

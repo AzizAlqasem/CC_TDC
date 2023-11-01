@@ -55,7 +55,7 @@ class DCounter(Threading):
 
             self.loop_counter += 1
             #print("R DAQ")
-            sleep(0.2) #0.2
+            sleep(0.3) #0.2
 
     def save(self, path, info):
         for tdc in self.tdcs_obj_list:
