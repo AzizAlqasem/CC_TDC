@@ -16,13 +16,13 @@ class ToF(Display, Threading):
         # init lines
         self.lines = []
         for tdc in self.tdcs_obj_list:
-            line, = self.ax.plot(tdc.time_arr, tdc.arr, label=tdc.name) # time, arr : for each module
+            line, = self.ax.plot(tdc.time_arr[::10], tdc.arr[::10], label=tdc.name) # time, arr : for each module
             self.lines.append(line)
 
         # init prev lines
         self.prev_lines = []
         for tdc in self.tdcs_obj_list:
-            prev_line, = self.ax.plot(tdc.time_arr, tdc.prev_arr, label=tdc.name+'_prev') # time, arr : for each module
+            prev_line, = self.ax.plot(tdc.time_arr[::10], tdc.prev_arr[::10], label=tdc.name+'_prev') # time, arr : for each module
             prev_line.set_linestyle("None") #Invisible
             self.prev_lines.append(prev_line)
 
@@ -38,7 +38,7 @@ class ToF(Display, Threading):
 
     def update(self,):
         for i, tdc in enumerate(self.tdcs_obj_list):
-            self.lines[i].set_ydata(tdc.arr/tdc.arr.max()) #Normalization
+            self.lines[i].set_ydata(tdc.arr[::10]/tdc.arr.max()) #Normalization
             #self.ymax = np.max([self.ymax, tdc.arr.max()])
         #if self.auto_scale:
         #    self.ax.set_ylim(0.1, self.ymax*1.05)
@@ -57,7 +57,7 @@ class ToF(Display, Threading):
     def show_prev_arr(self, ON=True):
         for i, tdc in enumerate(self.tdcs_obj_list):
             if ON:
-                self.prev_lines[i].set_ydata(tdc.prev_arr/tdc.prev_arr.max())
+                self.prev_lines[i].set_ydata(tdc.prev_arr[::10]/tdc.prev_arr.max())
                 self.prev_lines[i].set_linestyle("--")  # Visible
             else:
                 self.prev_lines[i].set_linestyle("None") # Invisible
