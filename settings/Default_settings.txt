@@ -2,7 +2,7 @@
 auto_save_delay = 10       # n of loops to skip when auto saving
 
 # CC-USB Settings
-cc_time_out_ms = 100
+cc_time_out_ms = 200 #100
 LAM = 0
 trig_delay_us = 500
 buffer_opt = 0                      # Buffer option (0 for largest buffer size: 4K ) - see CC_USB Manual

@@ -81,7 +81,10 @@ class DAQ:
         self.offset = settings.get_setting("time_offset", target = self.name)
         self.time_resolution = settings.get_setting("time_resolution", target = self.name)
         self.tdc_t_shift = self.slop * self.channel + self.offset # unit in [ns]
-        self.time_arr = self.time_resolution * np.arange(self.size, dtype=self.type) + self.tdc_t_shift #ns
+        # self.time_arr = self.time_resolution * np.arange(self.size, dtype=self.type) + self.tdc_t_shift #ns\
+        mcv = settings.get_setting('min_count_value', target=self.name)
+        mxcv = settings.get_setting('max_count_value', target=self.name)
+        self.time_arr =  self.time_resolution * np.arange(mcv, mxcv, dtype=self.type) + self.tdc_t_shift #ns
 
     def get_tot_avg_hit(self, last=None):
         if last:
