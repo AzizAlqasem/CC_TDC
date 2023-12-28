@@ -33,5 +33,5 @@ TDC4208_time_resolution = 1       # ns
 TDC4208_time_slop = 0#1             # ?? wrong
 TDC4208_time_offset = 0           #?? wrong
 TDC4208_min_count_value = 1 #??
-TDC4208_max_count_value = 2000#2048 #??
+TDC4208_max_count_value = 3000 # Max TOF
 

@@ -24,7 +24,7 @@ def main_page():
     # Tot avg hit
     avg_hits1 = fc2.empty()
     avg_hits2 = fc2.empty()
-    avh_list = main.dcounter.get_tot_avg_hit(last=10)
+    avh_list = main.dcounter.get_tot_avg_hit(last=1)
     avh1 = avh_list[0][1] # TDC1
     avh2 = avh_list[1][1] # TDC2
     avg_hits1.write(f"TDC1: {round(avh1,3)}")
@@ -43,7 +43,7 @@ def main_page():
     main.adj_y_scale(yscale)
 
     # x and y lim
-    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=2000.0, value=(0.0,500.0), step=0.5)
+    x_lim = sc1.slider("X-lim", min_value=0.0, max_value=3000.0, value=(0.0,1000.0), step=0.5)
     y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-4,0), step=1)
     main.adj_xlim(x_lim)
     y_lim=list(y_lim)
@@ -214,7 +214,7 @@ def main_page():
             tof_hand.pyplot(main.tof.fig)
             #s_hand.pyplot(main.mtof_stream.fig)
             h_hand.pyplot(main.mtof_hit.fig)
-        avh_list = main.dcounter.get_tot_avg_hit(last=10)
+        avh_list = main.dcounter.get_tot_avg_hit(last=1)
         avh1 = avh_list[0][1] # TDC1
         avh2 = avh_list[1][1] # TDC2
         avg_hits1.write(f"TDC1: {round(avh1,3)}")
