@@ -36,6 +36,10 @@ class DCounter(Threading):
             tot_avg_hit_list.append([tdc.name, avg])
         return tot_avg_hit_list
 
+    def get_avg_hit_range(self, start, stop): # avg count between start and stop in ns
+        for tdc in self.tdcs_obj_list:
+            return tdc.get_total_hit_range(start, stop) / self.tot_laser_shot
+
     def _run(self,):
         # get data fron TDC
         data = read_out.get_data()

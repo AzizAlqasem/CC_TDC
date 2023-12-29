@@ -93,6 +93,10 @@ class DAQ:
             last = 1 # excluding the first 0 element
         return np.average(self.avg_hit_list[last:]) if self.avg_hit_list else np.nan
 
+    def get_total_hit_range(self, start:int, end:int) -> int:
+        # should work with TDC 4208 only since the first element is 1ns and resolution is 1ns
+        return np.sum(self.arr[start-1:end])
+
     def auto_save(self):
         with open(self.name+"_temp.csv", 'w') as f:
             np.savetxt(f, self.arr)

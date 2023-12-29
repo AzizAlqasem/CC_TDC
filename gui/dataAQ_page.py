@@ -118,7 +118,7 @@ def main_page():
         main.current_motor_pos = main.scan_angles.pop(0)/10
         main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE)
         main.run()
-        sleep(4) # Wait for motor to move
+        sleep(5) # Wait for motor to move
         main.clear() # Clear buffer from previous scan (angle)
         # For LIED round scan (Temp)
         main.round_counter = 1
@@ -155,6 +155,15 @@ def main_page():
             pass
         save_file_path = rf"../Projects/{proj}/{expr}.csv"
         main.dcounter.save(save_file_path, info)
+
+    # Sum counts between t_i and t_f
+    st.sidebar.write("### Average Counts")
+    sbcr_0, sbcr_1, sbcr_2 = st.sidebar.columns([1,1,1])
+    t_i = sbcr_0.text_input("Ti (ns)", "0")
+    t_f = sbcr_1.text_input("Tf (ns)", "30000")
+    # empty text box
+    avg_count_label = sbcr_2.empty()
+    avg_count_label.write(f"\n{round(main.dcounter.get_avg_hit_range(int(t_i)+1, int(t_f)),5)}")
 
 
     # Update outputs:
@@ -207,7 +216,7 @@ def main_page():
                     main.motor.move_to((main.current_motor_pos+motor_pos_offset) * main.STEP_SIZE_PER_DEGREE)
                 # Run again
                 main.run()
-                sleep(4) # Wait for motor to move
+                sleep(5) # Wait for motor to move
                 main.clear() # Clear buffer from previous scan (angle)
 
         if main.live_plot:
@@ -220,6 +229,7 @@ def main_page():
         avg_hits1.write(f"TDC1: {round(avh1,3)}")
         # avg_hits2.write(f"TDC2: {round(avh2,3)}")
         laser_shots.write(f"Total Laser shots  =  {tot_laser_shot}\n")
+        avg_count_label.write(f"\n{round(main.dcounter.get_avg_hit_range(int(t_i)+1, int(t_f)),5)}")
 
         sleep(update_delay)
 
