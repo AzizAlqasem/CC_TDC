@@ -133,6 +133,8 @@ dmypy.json
 # No Data
 *temp.csv
 TDC2228A_temp.csv
+avg_hit_range_dat
+debug.txt
 # No pyxxusb
 interface/pyxxusb/*
 .vscode
