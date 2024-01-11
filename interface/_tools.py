@@ -6,8 +6,11 @@ except Exception as e:
     print("The PC should be connected to the cc-usb")
 
 
-def gen_command(N, A, F):
-    return F + 32*A + 512*N
+def gen_command(N, A, F, LongMode=1):
+    # Command = F+32*A+512*N+16384*LongMode # LongMode = 1 for 24-bit, 0 for 16-bit
+    # 24-bit for TDC 4208 to go beyond 32us.
+    return F + 32*A + 512*N + 16384*LongMode
+    # The default LongMode used to be 0 for 16-bit, but now it is 1 for 24-bit.
 
 def stack_as_longArray(stack):
     stack_ar = pycc.new_longArray(len(stack))

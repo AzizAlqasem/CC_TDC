@@ -43,7 +43,7 @@ def main_page():
     main.adj_y_scale(yscale)
 
     # x and y lim
-    x_lim = sc1.slider("X-lim", min_value=0, max_value=50000, value=(0,40000), step=1000)
+    x_lim = sc1.slider("X-lim", min_value=0, max_value=200000, value=(0,30000), step=1000)
     y_lim = sc2.slider("Y-lim", min_value=0, max_value=-9, value=(-4,0), step=1)
     main.adj_xlim(x_lim)
     y_lim=list(y_lim)
@@ -229,8 +229,13 @@ def main_page():
         avg_hits1.write(f"TDC1: {round(avh1,3)}")
         # avg_hits2.write(f"TDC2: {round(avh2,3)}")
         laser_shots.write(f"Total Laser shots  =  {tot_laser_shot}\n")
-        avg_count_label.write(f"\n{round(main.dcounter.get_avg_hit_range(int(t_i)+1, int(t_f)),5)}")
-
+        avg_hit_range = main.dcounter.get_avg_hit_range(int(t_i)+1, int(t_f))
+        avg_count_label.write(f"\n{round(avg_hit_range,5)}")
+        ############################## extra
+        # save the avg hit range in a file
+        main.avg_hit_range_file.write(f"{avg_hit_range}\n")
+        main.clear()
+        ##############################
         sleep(update_delay)
 
     tof_hand.pyplot(main.tof.fig)

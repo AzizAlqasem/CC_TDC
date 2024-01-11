@@ -1,4 +1,4 @@
-"""This module is to interface with the CC-USB using 
+"""This module is to interface with the CC-USB using
 the pyxxusb which is a pyhton wrape to the main C/C++
 module made by the manufacture.
 
@@ -50,8 +50,8 @@ class CC_USB:
             else:
                 raise TypeError("The stack type is not suported. Consider using list or longArray")
 
-        self.data_shortArray = pycc.new_shortArray(8192) # 32bit PC reads 8192 buff size
-        
+        self.data_shortArray = pycc.new_shortArray(8192) # 32bit PC reads 8192 buff size (short is 16-bit)
+        # self.data_intArray = pycc.new_intArray(8192)#pycc.new_longArray(8192) # 32bit PC reads 8192 buff size (long is 24-bit)
         self.cc_dev = pycc.device_open()
 
     def connect_to_module(self, module:object):
@@ -99,21 +99,50 @@ class CC_USB:
         return bytes_written, pycc.int_p_value(q), pycc.int_p_value(x)
 
     def bulk_read(self):
-        byets_receved = pycc.xxusb_bulk_read(self.cc_dev, self.data_shortArray, 
+        byets_receved = pycc.xxusb_bulk_read(self.cc_dev, self.data_shortArray,
             8192, self.time_out_ms) # 32-bit PC reads 8192 buff size
         if byets_receved<0:
             print("No Data to read ..")
             return None
         else:
             data_size = byets_receved // 2
-            return [pycc.shortArray_getitem(self.data_shortArray, i) for i in range(data_size)]
-        
-    
+            return [pycc.shortArray_getitem(self.data_shortArray, i) for i in range(data_size)] # for 16-bit
+
+    def bulk_read_24bit(self):
+        byets_receved = pycc.xxusb_bulk_read(self.cc_dev, self.data_shortArray,
+            8192, self.time_out_ms) # 32-bit PC reads 8192 buff size
+        if byets_receved<0:
+            print("No Data to read ..")
+            return None
+        data_size = byets_receved // 2
+        raw_data = [pycc.shortArray_getitem(self.data_shortArray, i) for i in range(data_size)]
+        data_24bit = [raw_data[0], 9]
+        data = raw_data[1:-1]
+        for j in range(0,raw_data[0]):
+            s = 17 * j + 1
+            e = 17 * j + 16
+            for c in range(0, 16, 2):
+                i1 = s + c
+                i2 = s + c + 1
+                p1 = data[i1]
+                if p1<0:
+                    bit24 = '-0b'
+                    b1 = bin(p1)[3:].zfill(16)
+                else:
+                    bit24 = '0b'
+                    b1 = bin(p1)[2:].zfill(16)
+                b2 = bin(data[i2])[2:].zfill(8)[-8:]
+                num24bit = int(bit24+b2+b1, 2)
+                data_24bit.append(num24bit)
+            data_24bit.append(9) # 8 hit + 1 marker
+        data_24bit.append(raw_data[-1])
+        return data_24bit
+
     def drain_FIFO_data(self):
         loop = 0
         byets_receved = 1
         while byets_receved > 0 and loop < 100:
-            byets_receved = pycc.xxusb_bulk_read(self.cc_dev, self.data_shortArray, 
+            byets_receved = pycc.xxusb_bulk_read(self.cc_dev, self.data_shortArray,
                                             8192, self.time_out_ms)
             loop += 1
 
@@ -126,7 +155,7 @@ class CC_USB:
 
 
 class CC_Module:
-    
+
     def __init__(self, module_slot_number):
         self.N = module_slot_number
 
@@ -154,7 +183,6 @@ class CC_Module:
 
 
 
-    
 
-    
-    
+
+

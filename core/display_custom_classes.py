@@ -135,7 +135,7 @@ class Mtof_hits(Display, Threading):
     def init_fixed_hit_arr(self,):
         self.index = 0
         for tdc in self.tdcs_obj_list:
-            tdc.fixed_hit_arr = np.zeros(self.fixed_hit_arr_size, dtype=np.int16)
+            tdc.fixed_hit_arr = np.zeros(self.fixed_hit_arr_size, dtype=np.int32)
 
 
     def update(self,):

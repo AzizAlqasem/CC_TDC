@@ -92,12 +92,16 @@ class Main:
         else:
             print("The app is already running!")
 
+        self.avg_hit_range_file = open("avg_hit_range_dat", "w") #*
+
     def stop(self):
         self.dcounter.terminate_thread(
             chiled_threads=[self.tof, self.mtof_hit]#[self.tof, self.mtof_stream, self.mtof_hit]
             )
         self.is_running = False
         print("stop")
+
+        self.avg_hit_range_file.close() #*
 
 
     def clear(self):
@@ -106,6 +110,7 @@ class Main:
         for d in [self.tof, self.mtof_hit]:#[self.tof, self.mtof_stream, self.mtof_hit]:
             d.update()
             #d.st_plot()
+
 
 
     def TDC_connect(self):

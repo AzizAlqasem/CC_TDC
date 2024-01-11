@@ -8,7 +8,7 @@ trig_delay_us = 500
 buffer_opt = 0                      # Buffer option (0 for largest buffer size: 4K ) - see CC_USB Manual
 marker = True
 marker_size = 2                     # Tow nubers before and after channels data [9, ... data from TDC ... , -1]
-#start_marker = 9      # [part of post_calculations] define the start of chunck reading = the nuber of data point for each loop
+# start_marker = 9      # [part of post_calculations] define the start of chunck reading = the nuber of data point for each loop
 end_marker = -1                     # define the end of chunck reading
 #target_modules = [TDC2228A,TDC4208]         # [TDC2228A,TDC4208] for "dual" mode
 #target_modules = [TDC2228A]
@@ -33,5 +33,5 @@ TDC4208_time_resolution = 1       # ns
 TDC4208_time_slop = 0#1             # ?? wrong
 TDC4208_time_offset = 0           #?? wrong
 TDC4208_min_count_value = 1 # the tdc min output time to include in the histogram
-TDC4208_max_count_value = 40000 # (ns) The tdc max output time to include in the histogram
+TDC4208_max_count_value = 200000 # (ns) The tdc max output time to include in the histogram
 
