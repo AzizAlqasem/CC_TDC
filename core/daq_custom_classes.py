@@ -29,6 +29,9 @@ class DCounter(Threading):
         self.tot_laser_shot = 0
         self.loop_counter = 0
 
+        # Drain the buffer
+        read_out.cc_usb.drain_FIFO_data()
+
     def get_tot_avg_hit(self, last=None): # redendencies with DAQ
         tot_avg_hit_list = []
         for tdc in self.tdcs_obj_list:
