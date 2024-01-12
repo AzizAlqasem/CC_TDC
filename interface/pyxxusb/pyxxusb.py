@@ -155,6 +155,30 @@ def charArray_getitem(ary, index):
 def charArray_setitem(ary, index, value):
     return _pyxxusb.charArray_setitem(ary, index, value)
 
+def new_ulongArray(nelements):
+    return _pyxxusb.new_ulongArray(nelements)
+
+def delete_ulongArray(ary):
+    return _pyxxusb.delete_ulongArray(ary)
+
+def ulongArray_getitem(ary, index):
+    return _pyxxusb.ulongArray_getitem(ary, index)
+
+def ulongArray_setitem(ary, index, value):
+    return _pyxxusb.ulongArray_setitem(ary, index, value)
+
+def new_ushortArray(nelements):
+    return _pyxxusb.new_ushortArray(nelements)
+
+def delete_ushortArray(ary):
+    return _pyxxusb.delete_ushortArray(ary)
+
+def ushortArray_getitem(ary, index):
+    return _pyxxusb.ushortArray_getitem(ary, index)
+
+def ushortArray_setitem(ary, index, value):
+    return _pyxxusb.ushortArray_setitem(ary, index, value)
+
 def devices_find():
     return _pyxxusb.devices_find()
 

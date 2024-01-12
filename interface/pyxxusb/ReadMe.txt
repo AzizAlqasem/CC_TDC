@@ -7,3 +7,6 @@
 # Coversion commands:
 swig -c++ -python pyxxusb.i
 python setup.py build_ext --inplace
+
+#note:
+delete this file before recombile: _pyxxusb.cp39-win32.pyd

@@ -2694,9 +2694,11 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 #define SWIGTYPE_p_int swig_types[2]
 #define SWIGTYPE_p_long swig_types[3]
 #define SWIGTYPE_p_short swig_types[4]
-#define SWIGTYPE_p_usb_dev_handle swig_types[5]
-static swig_type_info *swig_types[7];
-static swig_module_info swig_module = {swig_types, 6, 0, 0, 0, 0};
+#define SWIGTYPE_p_unsigned_long swig_types[5]
+#define SWIGTYPE_p_unsigned_short swig_types[6]
+#define SWIGTYPE_p_usb_dev_handle swig_types[7]
+static swig_type_info *swig_types[9];
+static swig_module_info swig_module = {swig_types, 8, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3437,6 +3439,53 @@ SWIG_AsVal_short (PyObject * obj, short *val)
   static void charArray_setitem(char *ary, size_t index, char value) {
     ary[index] = value;
   }
+
+
+  static unsigned long *new_ulongArray(size_t nelements) { 
+    return (new unsigned long[nelements]());
+  }
+
+  static void delete_ulongArray(unsigned long *ary) {
+    delete[] ary;
+  }
+
+  static unsigned long ulongArray_getitem(unsigned long *ary, size_t index) {
+    return ary[index];
+  }
+  static void ulongArray_setitem(unsigned long *ary, size_t index, unsigned long value) {
+    ary[index] = value;
+  }
+
+
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long  (unsigned long value)
+{
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value));
+}
+
+
+  static unsigned short *new_ushortArray(size_t nelements) { 
+    return (new unsigned short[nelements]());
+  }
+
+  static void delete_ushortArray(unsigned short *ary) {
+    delete[] ary;
+  }
+
+  static unsigned short ushortArray_getitem(unsigned short *ary, size_t index) {
+    return ary[index];
+  }
+  static void ushortArray_setitem(unsigned short *ary, size_t index, unsigned short value) {
+    ary[index] = value;
+  }
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_unsigned_SS_short  (unsigned short value)
+{    
+  return SWIG_From_unsigned_SS_long  (value);
+}
 
 
 SWIGINTERN int
@@ -4249,6 +4298,230 @@ SWIGINTERN PyObject *_wrap_charArray_setitem(PyObject *SWIGUNUSEDPARM(self), PyO
   return resultobj;
 fail:
   if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ulongArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject *swig_obj[1] ;
+  unsigned long *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  ecode1 = SWIG_AsVal_size_t(swig_obj[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ulongArray" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = static_cast< size_t >(val1);
+  result = (unsigned long *)new_ulongArray(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_long, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ulongArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  unsigned long *arg1 = (unsigned long *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_unsigned_long, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ulongArray" "', argument " "1"" of type '" "unsigned long *""'"); 
+  }
+  arg1 = reinterpret_cast< unsigned long * >(argp1);
+  delete_ulongArray(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ulongArray_getitem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  unsigned long *arg1 = (unsigned long *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  unsigned long result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "ulongArray_getitem", 2, 2, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_unsigned_long, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ulongArray_getitem" "', argument " "1"" of type '" "unsigned long *""'"); 
+  }
+  arg1 = reinterpret_cast< unsigned long * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ulongArray_getitem" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (unsigned long)ulongArray_getitem(arg1,arg2);
+  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ulongArray_setitem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  unsigned long *arg1 = (unsigned long *) 0 ;
+  size_t arg2 ;
+  unsigned long arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  unsigned long val3 ;
+  int ecode3 = 0 ;
+  PyObject *swig_obj[3] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "ulongArray_setitem", 3, 3, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_unsigned_long, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ulongArray_setitem" "', argument " "1"" of type '" "unsigned long *""'"); 
+  }
+  arg1 = reinterpret_cast< unsigned long * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ulongArray_setitem" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_unsigned_SS_long(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ulongArray_setitem" "', argument " "3"" of type '" "unsigned long""'");
+  } 
+  arg3 = static_cast< unsigned long >(val3);
+  ulongArray_setitem(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ushortArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject *swig_obj[1] ;
+  unsigned short *result = 0 ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  ecode1 = SWIG_AsVal_size_t(swig_obj[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ushortArray" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = static_cast< size_t >(val1);
+  result = (unsigned short *)new_ushortArray(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_short, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ushortArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  unsigned short *arg1 = (unsigned short *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_unsigned_short, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ushortArray" "', argument " "1"" of type '" "unsigned short *""'"); 
+  }
+  arg1 = reinterpret_cast< unsigned short * >(argp1);
+  delete_ushortArray(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ushortArray_getitem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  unsigned short *arg1 = (unsigned short *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  unsigned short result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "ushortArray_getitem", 2, 2, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_unsigned_short, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ushortArray_getitem" "', argument " "1"" of type '" "unsigned short *""'"); 
+  }
+  arg1 = reinterpret_cast< unsigned short * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ushortArray_getitem" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (unsigned short)ushortArray_getitem(arg1,arg2);
+  resultobj = SWIG_From_unsigned_SS_short(static_cast< unsigned short >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ushortArray_setitem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  unsigned short *arg1 = (unsigned short *) 0 ;
+  size_t arg2 ;
+  unsigned short arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  unsigned short val3 ;
+  int ecode3 = 0 ;
+  PyObject *swig_obj[3] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "ushortArray_setitem", 3, 3, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_unsigned_short, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ushortArray_setitem" "', argument " "1"" of type '" "unsigned short *""'"); 
+  }
+  arg1 = reinterpret_cast< unsigned short * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ushortArray_setitem" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_unsigned_SS_short(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ushortArray_setitem" "', argument " "3"" of type '" "unsigned short""'");
+  } 
+  arg3 = static_cast< unsigned short >(val3);
+  ushortArray_setitem(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -6023,6 +6296,14 @@ static PyMethodDef SwigMethods[] = {
 	 { "delete_charArray", _wrap_delete_charArray, METH_O, NULL},
 	 { "charArray_getitem", _wrap_charArray_getitem, METH_VARARGS, NULL},
 	 { "charArray_setitem", _wrap_charArray_setitem, METH_VARARGS, NULL},
+	 { "new_ulongArray", _wrap_new_ulongArray, METH_O, NULL},
+	 { "delete_ulongArray", _wrap_delete_ulongArray, METH_O, NULL},
+	 { "ulongArray_getitem", _wrap_ulongArray_getitem, METH_VARARGS, NULL},
+	 { "ulongArray_setitem", _wrap_ulongArray_setitem, METH_VARARGS, NULL},
+	 { "new_ushortArray", _wrap_new_ushortArray, METH_O, NULL},
+	 { "delete_ushortArray", _wrap_delete_ushortArray, METH_O, NULL},
+	 { "ushortArray_getitem", _wrap_ushortArray_getitem, METH_VARARGS, NULL},
+	 { "ushortArray_setitem", _wrap_ushortArray_setitem, METH_VARARGS, NULL},
 	 { "devices_find", _wrap_devices_find, METH_NOARGS, NULL},
 	 { "device_open", _wrap_device_open, METH_NOARGS, NULL},
 	 { "xxusb_bulk_read", _wrap_xxusb_bulk_read, METH_VARARGS, NULL},
@@ -6079,6 +6360,8 @@ static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_long = {"_p_long", "long *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_short = {"_p_short", "short *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "unsigned long *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_usb_dev_handle = {"_p_usb_dev_handle", "usb_dev_handle *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -6087,6 +6370,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_int,
   &_swigt__p_long,
   &_swigt__p_short,
+  &_swigt__p_unsigned_long,
+  &_swigt__p_unsigned_short,
   &_swigt__p_usb_dev_handle,
 };
 
@@ -6095,6 +6380,8 @@ static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_usb_dev_handle[] = {  {&_swigt__p_usb_dev_handle, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -6103,6 +6390,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_int,
   _swigc__p_long,
   _swigc__p_short,
+  _swigc__p_unsigned_long,
+  _swigc__p_unsigned_short,
   _swigc__p_usb_dev_handle,
 };
 
