@@ -9,7 +9,7 @@ st.sidebar.columns = st.sidebar.beta_columns
 
 main = Main()
 
-
+#
 
 def main_page():
     # First Row: Figures
